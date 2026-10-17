@@ -29,14 +29,13 @@ and stay accountable with the people around you.
 
 ## 📱 Screenshots
 
-<!-- Screenshots are added once captured from the running Mini Program.
 <p align="center">
-  <img src="docs/images/screenshot-today.png" width="200" alt="Today" />
-  <img src="docs/images/screenshot-habits.png" width="200" alt="Habits" />
-  <img src="docs/images/screenshot-stats.png" width="200" alt="Stats" />
-  <img src="docs/images/screenshot-social.png" width="200" alt="Friends" />
+  <img src="docs/images/screenshot-today.jpg" width="200" alt="Today" />
+  <img src="docs/images/screenshot-habits.jpg" width="200" alt="Habits" />
+  <img src="docs/images/screenshot-stats.jpg" width="200" alt="Stats" />
+  <img src="docs/images/screenshot-social.jpg" width="200" alt="Friends" />
+  <img src="docs/images/screenshot-achievement.jpg" width="200" alt="Achievement unlocked" />
 </p>
--->
 
 ## 🧱 Built with
 
