@@ -227,3 +227,6 @@ Thumbs.db
 *.log
 .temp/
 dist/
+
+# local nested repo, not part of this project
+AInalised-Reading/

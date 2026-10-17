@@ -30,11 +30,15 @@ and stay accountable with the people around you.
 ## 📱 Screenshots
 
 <p align="center">
-  <img src="docs/images/screenshot-today.jpg" width="200" alt="Today" />
-  <img src="docs/images/screenshot-habits.jpg" width="200" alt="Habits" />
-  <img src="docs/images/screenshot-stats.jpg" width="200" alt="Stats" />
-  <img src="docs/images/screenshot-social.jpg" width="200" alt="Friends" />
-  <img src="docs/images/screenshot-achievement.jpg" width="200" alt="Achievement unlocked" />
+  <img src="docs/images/screenshot-today.png" width="152" alt="Today" />
+  &nbsp;
+  <img src="docs/images/screenshot-habits.png" width="152" alt="Habits" />
+  &nbsp;
+  <img src="docs/images/screenshot-stats.png" width="152" alt="Stats" />
+  &nbsp;
+  <img src="docs/images/screenshot-social.png" width="152" alt="Friends" />
+  &nbsp;
+  <img src="docs/images/screenshot-achievement.png" width="152" alt="Achievement unlocked" />
 </p>
 
 ## 🧱 Built with
