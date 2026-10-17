@@ -1,0 +1,20 @@
+<view class="tab-bar">
+  <view class="tab-bar-border"></view>
+  <view
+    class="tab-item {{selected === index ? 'active' : ''}}"
+    wx:for="{{list}}"
+    wx:key="pagePath"
+    bindtap="switchTab"
+    data-path="{{item.pagePath}}"
+    data-index="{{index}}"
+    hover-class="tab-press"
+    hover-stay-time="100"
+  >
+    <view class="tab-icon-wrap">
+      <text class="tab-icon">{{selected === index ? item.activeIcon : item.icon}}</text>
+      <view class="tab-badge" wx:if="{{item.dot && item.badge > 0}}">{{item.badge}}</view>
+      <view class="tab-dot-plain" wx:elif="{{item.inboxDot}}"></view>
+    </view>
+    <text class="tab-label">{{item.text}}</text>
+  </view>
+</view>

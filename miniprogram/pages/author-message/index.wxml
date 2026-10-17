@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 固定导航栏 -->
+  <view class="nav-fixed" style="padding-top: {{navTopPadding}}px">
+    <view class="nav-row">
+      <view class="nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+    </view>
+  </view>
+
+  <view style="height: {{navBarHeightPx}}px"></view>
+
+  <view class="content">
+    <view class="page-title-wrap">
+      <view class="page-title">作者的话</view>
+    </view>
+
+    <view class="para">
+      朋友你好！相逢即是有缘，非常感谢你能点进我的小程序，希望它能帮助到你 \^o^/
+    </view>
+
+    <view class="para">
+      这个小程序的起源其实来自于我第一次实习的一轮面试，当时我问面试官对我这种经验尚浅的大学生有什么进步的建议，面试官提议我尝试做一个小程序。我后来一想，对啊，为什么不呢？之前就有想法做一款打卡类 APP，小程序肯定是更简单的实践方式。<text class="bold">既然敢想，那就敢做。</text>
+    </view>
+
+    <view class="para">
+      开发过程肯定不是一帆风顺，但 AI 的发展确实降低了技术门槛，网上的经验分享帖也让我打开更多思路。有足够的兴趣和投入，我很自豪能够独立把这款小程序完整做出来。
+    </view>
+
+    <view class="para">
+      能走到这里，首先要感谢我家人的支持与陪伴。有一句话给我带来了很大力量：<text class="italic">"Doubt kills more dreams than failure ever will."</text>（Suzy Kassem）结合我们中国的古话：<text class="emphasis">有志者事竟成</text><text style="font-weight:400">——</text>无论事情多难，都不要怀疑自己，勇敢去尝试！
+    </view>
+
+    <view class="para">
+      其次感谢 Claude Code 和主流 AI 模型，没有几千轮的 AI 对话调试，就没有这款小程序的诞生。特此感谢 KJ 分享账号，让我能够两个 pro 账号轮换使用，极大提升了开发效率。同时感谢金照姐、雨萌姐耐心帮忙测试，协助完善小程序的功能。
+    </view>
+
+    <view class="para">
+      最后感谢我的小舅舅和面试官们，是你们的开导与建议给了我有勇气去实践自己的一个小小技术梦想。
+    </view>
+
+    <view class="para">
+      从简陋的框架开始，我按照自己理想中一款简洁但富有活力的打卡工具该有的样子，一点点从零到一打磨出了这款小程序。载着热爱、自律与阳光，愿每一位看到这里的朋友，都能<text class="bold">元气打卡，开心过好每一天！</text>
+    </view>
+
+    <view class="para">
+      如果你对小程序有任何建议，欢迎使用站内消息联系我 (●'◡'●)
+    </view>
+
+    <view class="signature">
+      <view class="sig-label">创始人</view>
+      <view class="sig-name">烨</view>
+      <view class="sig-date">2026/05/01</view>
+      <view class="sig-date">劳动节快乐</view>
+    </view>
+  </view>
+</view>

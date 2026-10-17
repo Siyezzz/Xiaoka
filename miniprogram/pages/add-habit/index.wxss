@@ -1,0 +1,508 @@
+.page {
+  min-height: 100vh;
+  background: #EBF8F2;
+  padding-bottom: 60rpx;
+}
+
+/* 固定返回键 */
+.page-nav-fixed {
+  background: #45C5A0;
+}
+
+/* 顶部预览（随页面滚动）*/
+.preview-header {
+  background: linear-gradient(160deg, #45C5A0, #6DD5C0);
+  padding: 0 40rpx 52rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-icon-wrap {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 38rpx;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+  position: relative;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.preview-icon { font-size: 72rpx; }
+
+.preview-edit-badge {
+  position: absolute;
+  bottom: -10rpx;
+  right: -10rpx;
+  width: 44rpx;
+  height: 44rpx;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.12);
+}
+
+.preview-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.preview-freq {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.preview-tip {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.45);
+  margin-top: 6rpx;
+}
+
+/* Emoji 输入 */
+.emoji-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: rgba(255,255,255,0.20);
+  border-radius: 20rpx;
+  padding: 12rpx 20rpx;
+  margin-top: 20rpx;
+  width: 420rpx;
+}
+
+.emoji-input {
+  flex: 1;
+  height: 64rpx;
+  font-size: 36rpx;
+  color: #fff;
+  background: transparent;
+}
+
+.emoji-ph { color: rgba(255,255,255,0.45); font-size: 26rpx; }
+
+.emoji-done-btn {
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 600;
+  background: rgba(255,255,255,0.22);
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  white-space: nowrap;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 14rpx;
+}
+
+.icon-cell {
+  aspect-ratio: 1;
+  border-radius: 14rpx;
+  background: #F7F8FC;
+  border: 2rpx solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.icon-selected { transform: scale(1.12); }
+
+/* 通用卡片 */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 0 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+}
+
+.mt16 { margin-top: 16rpx; }
+.mt24 { margin-top: 24rpx; }
+
+.row-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 22rpx;
+  letter-spacing: 1rpx;
+}
+
+/* 名称输入 */
+.name-input {
+  width: 100%;
+  font-size: 32rpx;
+  color: #333;
+  height: 72rpx;
+  border-bottom: 2rpx solid #F0F0F0;
+}
+
+.ph { color: #CCC; font-size: 30rpx; }
+
+/* 颜色 */
+.color-row { display: flex; gap: 20rpx; flex-wrap: wrap; }
+
+.color-dot {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+
+.color-selected { transform: scale(1.2); box-shadow: 0 4rpx 14rpx rgba(0,0,0,0.22); }
+.color-check { font-size: 26rpx; color: #fff; font-weight: 700; }
+
+/* 频率 */
+.freq-tabs { display: flex; gap: 16rpx; margin-bottom: 24rpx; }
+
+.freq-tab {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  background: #F7F8FC;
+  font-size: 28rpx;
+  color: #666;
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform;
+}
+
+.freq-active { font-weight: 700; }
+
+.freq-free-desc {
+  font-size: 24rpx;
+  color: #AAA;
+  margin-top: -8rpx;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+/* 周几 */
+.day-row { display: flex; gap: 8rpx; }
+
+.day-cell {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14rpx;
+  background: #F7F8FC;
+  font-size: 26rpx;
+  color: #666;
+  border: 2rpx solid transparent;
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform;
+}
+
+.day-active { color: #fff; font-weight: 600; }
+
+/* 分享 / 开关行 */
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switch-info { flex: 1; }
+.switch-title { font-size: 30rpx; font-weight: 600; color: #333; margin-bottom: 6rpx; }
+.switch-sub { font-size: 24rpx; color: #AAA; }
+
+.divider { height: 1rpx; background: #F0F0F0; margin: 20rpx 0; }
+
+/* 可见范围 */
+.share-mode-tabs { display: flex; gap: 16rpx; margin-bottom: 20rpx; }
+
+.share-tab {
+  flex: 1;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14rpx;
+  border: 2rpx solid #E8E8E8;
+  font-size: 26rpx;
+  color: #999;
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform;
+}
+
+.share-tab-active { font-weight: 600; }
+
+/* 好友列表 */
+.loading-tip { font-size: 26rpx; color: #CCC; text-align: center; padding: 20rpx 0; }
+
+.empty-friends {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 28rpx 0;
+  font-size: 26rpx;
+  color: #AAA;
+  text-align: center;
+}
+
+.go-invite {
+  color: #45C5A0;
+  font-size: 26rpx;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  line-height: 1.4;
+  width: auto;
+  display: inline-block;
+}
+.go-invite::after { border: none; }
+
+.friend-list { display: flex; flex-direction: column; gap: 16rpx; }
+
+.friend-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 12rpx 0;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.friend-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #45C5A022;
+  color: #45C5A0;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.friend-name { flex: 1; font-size: 28rpx; color: #333; }
+
+.friend-check {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 2rpx solid #DDD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 700;
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform;
+}
+
+.check-on { border-color: transparent; }
+
+/* 提醒时间 */
+.reminder-time-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.reminder-time-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.reminder-time-picker {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F7F8FC;
+  border-radius: 20rpx;
+  padding: 22rpx 28rpx;
+  min-height: 96rpx;
+  box-sizing: border-box;
+}
+
+.reminder-time-val {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 2rpx;
+}
+
+.reminder-time-edit {
+  font-size: 24rpx;
+  padding: 8rpx 18rpx;
+  border-radius: 12rpx;
+  white-space: nowrap;
+}
+
+.reminder-time-del {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #FFF0F0;
+  color: #FF6B6B;
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.reminder-add-time {
+  font-size: 26rpx;
+  color: #45C5A0;
+  padding: 8rpx 0;
+  transition: opacity 0.15s;
+}
+
+/* 跳过提醒设置 */
+.reminder-skip-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.reminder-skip-label {
+  font-size: 26rpx;
+  color: #555;
+}
+
+.reminder-stepper {
+  display: flex;
+  align-items: center;
+  background: #F5F5F5;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+.stepper-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.stepper-disabled {
+  opacity: 0.3;
+}
+
+.stepper-val {
+  min-width: 48rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.reminder-skip-tip {
+  font-size: 22rpx;
+  color: #BBB;
+  margin-top: 8rpx;
+  padding-left: 4rpx;
+}
+
+/* 自定义时间选择器 */
+.time-picker-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+
+.time-picker-sheet {
+  width: 100%;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.time-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 40rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.time-picker-cancel { font-size: 30rpx; color: #999; padding: 8rpx 0; }
+.time-picker-title { font-size: 30rpx; font-weight: 600; color: #333; }
+.time-picker-confirm { font-size: 30rpx; font-weight: 600; padding: 8rpx 0; }
+
+.picker-col-labels {
+  display: flex;
+  padding: 16rpx 0 0;
+}
+
+.picker-col-label {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #BBB;
+  font-weight: 500;
+}
+
+.time-picker-view {
+  width: 100%;
+  height: 480rpx;
+}
+
+.picker-item {
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 保存按钮 */
+.save-wrap { padding: 40rpx 32rpx 0; }
+
+.save-btn {
+  width: 100%;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 48rpx;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  border: none;
+  box-shadow:
+    0 1rpx 0 rgba(0,0,0,0.1),
+    0 6rpx 20rpx rgba(0,0,0,0.18),
+    inset 0 1rpx 0 rgba(255,255,255,0.20);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.save-btn::after { border: none; }

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "好友",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#EBF8F2",
+  "usingComponents": {}
+}

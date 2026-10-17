@@ -1,0 +1,311 @@
+<view class="page">
+  <!-- 固定返回键 -->
+  <view class="page-nav-fixed" style="background: {{selectedColor}}; padding-top: {{navTopPadding}}px;">
+    <view class="page-nav-row">
+      <view class="page-nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+    </view>
+  </view>
+
+  <block wx:if="{{pageReady}}">
+  <!-- 顶部预览（随页面滚动）-->
+  <view class="preview-header" style="background: linear-gradient(180deg, {{selectedColor}} {{navBarHeightPx}}px, {{selectedColor}}BB 100%); padding-top: {{navBarHeightPx}}px">
+    <view class="preview-icon-wrap" style="background: {{selectedColor}}33" bindtap="onTapIcon" hover-class="press-sm" hover-stay-time="80">
+      <text class="preview-icon">{{selectedIcon}}</text>
+      <view class="preview-edit-badge">✏️</view>
+    </view>
+    <view class="preview-name">{{name || '习惯名称'}}</view>
+    <view class="preview-freq">
+      {{freqType === 'daily' ? '每天打卡' : (freqType === 'free' ? '自由打卡' : '每周' + selectedDays.length + '天')}}
+    </view>
+    <!-- Emoji input row -->
+    <view class="emoji-input-row" wx:if="{{showEmojiInput}}">
+      <input
+        class="emoji-input"
+        type="text"
+        value="{{emojiInputVal}}"
+        bindinput="onEmojiInput"
+        focus="{{showEmojiInput}}"
+        placeholder="输入或粘贴 emoji"
+        placeholder-class="emoji-ph"
+        confirm-type="done"
+        bindconfirm="onEmojiDone"
+        adjust-position="false"
+      />
+      <view class="emoji-done-btn" bindtap="onEmojiDone">完成</view>
+    </view>
+    <view class="preview-tip" wx:else>点击图标换 Emoji</view>
+  </view>
+
+  <!-- 名称 -->
+  <view class="card mt24">
+    <view class="row-label">习惯名称</view>
+    <input
+      class="name-input"
+      placeholder="输入名称，图标会自动匹配"
+      placeholder-class="ph"
+      value="{{name}}"
+      bindinput="onNameInput"
+      maxlength="20"
+      focus="{{!isEdit}}"
+    />
+  </view>
+
+  <!-- 目标/鼓励语 -->
+  <view class="card mt16">
+    <view class="row-label">我的目标</view>
+    <input
+      class="name-input"
+      placeholder="给自己说一句鼓励的话 🌟"
+      placeholder-class="ph"
+      value="{{goalText}}"
+      bindinput="onGoalInput"
+      maxlength="50"
+    />
+  </view>
+
+  <!-- 频率 -->
+  <view class="card mt16">
+    <view class="row-label">打卡频率</view>
+    <view class="freq-tabs">
+      <view
+        class="freq-tab {{freqType === 'daily' ? 'freq-active' : ''}}"
+        style="{{freqType === 'daily' ? 'background:' + selectedColor + ';color:#fff' : ''}}"
+        bindtap="onFreqChange"
+        data-type="daily"
+        hover-class="press-sm"
+        hover-stay-time="60"
+      >每天</view>
+      <view
+        class="freq-tab {{freqType === 'weekly' ? 'freq-active' : ''}}"
+        style="{{freqType === 'weekly' ? 'background:' + selectedColor + ';color:#fff' : ''}}"
+        bindtap="onFreqChange"
+        data-type="weekly"
+        hover-class="press-sm"
+        hover-stay-time="60"
+      >每周自定义</view>
+      <view
+        class="freq-tab {{freqType === 'free' ? 'freq-active' : ''}}"
+        style="{{freqType === 'free' ? 'background:' + selectedColor + ';color:#fff' : ''}}"
+        bindtap="onFreqChange"
+        data-type="free"
+        hover-class="press-sm"
+        hover-stay-time="60"
+      >自由打卡</view>
+    </view>
+
+    <view class="freq-free-desc" wx:if="{{freqType === 'free'}}">无固定规律打卡</view>
+
+    <!-- 周几选择，使用 selectedDaysMap[index] 避免 indexOf 类型问题 -->
+    <view class="day-row" wx:if="{{freqType === 'weekly'}}">
+      <view
+        class="day-cell {{selectedDaysMap[index] ? 'day-active' : ''}}"
+        style="{{selectedDaysMap[index] ? 'background:' + selectedColor + ';border-color:' + selectedColor : ''}}"
+        wx:for="{{weekLabels}}"
+        wx:key="*this"
+        bindtap="onToggleDay"
+        data-day="{{index}}"
+        hover-class="press-sm"
+        hover-stay-time="60"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 颜色 -->
+  <view class="card mt16">
+    <view class="row-label">颜色</view>
+    <view class="color-row">
+      <view
+        class="color-dot {{selectedColor === item ? 'color-selected' : ''}}"
+        style="background: {{item}}"
+        wx:for="{{colors}}"
+        wx:key="*this"
+        bindtap="onSelectColor"
+        data-color="{{item}}"
+        hover-class="press-sm"
+        hover-stay-time="60"
+      >
+        <text class="color-check" wx:if="{{selectedColor === item}}">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享设置 -->
+  <view class="card mt16">
+    <view class="switch-row">
+      <view class="switch-info">
+        <view class="switch-title">允许好友查看</view>
+        <view class="switch-sub">分享进度，好友还可以提醒你打卡</view>
+      </view>
+      <switch checked="{{sharingEnabled}}" color="{{selectedColor}}" bindchange="onSharingChange" style="transform:scale(0.85)" />
+    </view>
+
+    <!-- 展开：选择好友范围 -->
+    <block wx:if="{{sharingEnabled}}">
+      <view class="divider"></view>
+      <view class="switch-row">
+        <view class="switch-title">分享打卡照片</view>
+        <switch checked="{{sharePhotos}}" color="{{selectedColor}}" bindchange="onSharePhotosChange" style="transform:scale(0.85)" />
+      </view>
+      <view class="divider"></view>
+      <view class="row-label" style="margin-top:16rpx">可见范围</view>
+      <view class="share-mode-tabs">
+        <view
+          class="share-tab {{shareMode === 'all' ? 'share-tab-active' : ''}}"
+          style="{{shareMode === 'all' ? 'border-color:' + selectedColor + ';color:' + selectedColor : ''}}"
+          bindtap="onShareModeChange"
+          data-mode="all"
+          hover-class="press-sm"
+          hover-stay-time="60"
+        >所有好友</view>
+        <view
+          class="share-tab {{shareMode === 'custom' ? 'share-tab-active' : ''}}"
+          style="{{shareMode === 'custom' ? 'border-color:' + selectedColor + ';color:' + selectedColor : ''}}"
+          bindtap="onShareModeChange"
+          data-mode="custom"
+          hover-class="press-sm"
+          hover-stay-time="60"
+        >指定好友</view>
+      </view>
+
+      <!-- 好友列表（仅自定义时显示） -->
+      <block wx:if="{{shareMode === 'custom'}}">
+        <view class="loading-tip" wx:if="{{loadingFriends}}">加载好友中...</view>
+        <view class="empty-friends" wx:elif="{{friends.length === 0}}">
+          <text>还没有好友</text>
+          <view class="go-invite" bindtap="onShowShareCode" hover-class="press-text" hover-stay-time="80">分享小程序码邀请好友</view>
+        </view>
+        <view class="friend-list" wx:else>
+          <view
+            class="friend-row"
+            wx:for="{{friends}}"
+            wx:key="openid"
+            bindtap="onToggleFriend"
+            data-openid="{{item.openid}}"
+            hover-class="press"
+            hover-stay-time="80"
+          >
+            <view class="friend-avatar">{{item.displayName[0]}}</view>
+            <view class="friend-name">{{item.displayName}}</view>
+            <view class="friend-check {{selectedFriendIds[item.openid] ? 'check-on' : ''}}" style="{{selectedFriendIds[item.openid] ? 'background:' + selectedColor : ''}}">
+              <text wx:if="{{selectedFriendIds[item.openid]}}">✓</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+  </view>
+
+  <!-- 提醒设置 -->
+  <view class="card mt16">
+    <view class="switch-row">
+      <view class="switch-info">
+        <view class="switch-title">打卡提醒</view>
+        <view class="switch-sub">按时发微信消息提醒打卡</view>
+      </view>
+      <switch checked="{{reminderEnabled}}" color="{{selectedColor}}" bindchange="onReminderChange" style="transform:scale(0.85)" />
+    </view>
+
+    <block wx:if="{{reminderEnabled}}">
+      <view class="divider"></view>
+      <view class="row-label" style="margin-top:16rpx">提醒时间</view>
+      <view class="reminder-time-list">
+        <view class="reminder-time-row" wx:for="{{reminderTimes}}" wx:key="*this" wx:for-index="ti">
+          <view class="reminder-time-picker" bindtap="onOpenTimePicker" data-index="{{ti}}" hover-class="press" hover-stay-time="80">
+            <text class="reminder-time-val">{{item}}</text>
+            <text class="reminder-time-edit" style="color:{{selectedColor}};background:{{selectedColor}}18">修改</text>
+          </view>
+          <view class="reminder-time-del" wx:if="{{reminderTimes.length > 1}}" catchtap="onRemoveReminderTime" data-index="{{ti}}">✕</view>
+        </view>
+      </view>
+      <view class="reminder-add-time" style="color:{{selectedColor}}" bindtap="onAddReminderTime" wx:if="{{reminderTimes.length < 5}}" hover-class="press-sm" hover-stay-time="80">＋ 添加时间</view>
+
+      <view class="divider" style="margin-top:20rpx"></view>
+      <view class="reminder-skip-row">
+        <view class="reminder-skip-label">今日已打卡</view>
+        <view class="reminder-stepper">
+          <view class="stepper-btn {{reminderSkipCount <= 0 ? 'stepper-disabled' : ''}}" bindtap="onDecSkipCount" hover-class="press-sm" hover-stay-time="60">－</view>
+          <text class="stepper-val">{{reminderSkipCount}}</text>
+          <view class="stepper-btn {{reminderSkipCount >= 10 ? 'stepper-disabled' : ''}}" bindtap="onIncSkipCount" hover-class="press-sm" hover-stay-time="60">＋</view>
+        </view>
+        <view class="reminder-skip-label">次后不提醒</view>
+      </view>
+      <view class="reminder-skip-tip" wx:if="{{reminderSkipCount === 0}}">（设为 0 则总是发提醒）</view>
+    </block>
+  </view>
+
+  <!-- 保存 -->
+  <view class="save-wrap">
+    <button
+      class="save-btn"
+      style="background:linear-gradient(135deg,{{selectedColor}},{{selectedColor}}BB)"
+      bindtap="onSave"
+      loading="{{saving}}"
+      disabled="{{saving}}"
+      hover-class="press"
+      hover-stay-time="100"
+    >{{isEdit ? '保存修改' : '添加习惯'}}</button>
+  </view>
+  </block>
+
+  <!-- 邀请好友小程序码 -->
+  <view class="time-picker-mask" wx:if="{{showShareCodeModal}}" bindtap="onHideShareCode">
+    <view class="time-picker-sheet" catchtap="">
+      <view class="time-picker-header">
+        <view class="time-picker-cancel" bindtap="onHideShareCode" hover-class="press-text" hover-stay-time="80">关闭</view>
+        <view class="time-picker-title">邀请好友</view>
+        <view style="width:80rpx"></view>
+      </view>
+      <view style="padding: 20rpx 40rpx 32rpx; display:flex; flex-direction:column; align-items:center; gap:20rpx;">
+        <view style="font-size:26rpx;color:#AAA;text-align:center;">让好友扫描小程序码，直接加你为好友</view>
+        <view style="min-height:320rpx;display:flex;align-items:center;justify-content:center;">
+          <view wx:if="{{loadingQR}}" style="font-size:26rpx;color:#BBB;">生成中...</view>
+          <image wx:elif="{{qrCodePath}}" style="width:320rpx;height:320rpx;border-radius:20rpx;" src="{{qrCodePath}}" mode="aspectFit" bindlongpress="onSaveQRCode"/>
+          <view wx:else style="font-size:26rpx;color:#BBB;">生成失败，请重试</view>
+        </view>
+        <view wx:if="{{qrCodePath}}" style="font-size:22rpx;color:#CCC;">长按图片可保存</view>
+        <view style="display:flex;gap:20rpx;width:100%;">
+          <view
+            style="flex:1;height:80rpx;border-radius:20rpx;display:flex;align-items:center;justify-content:center;font-size:28rpx;font-weight:600;background:{{selectedColor}};color:#fff;{{!qrCodePath?'opacity:0.4':''}}"
+            bindtap="onSaveQRCode"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >保存图片</view>
+          <view
+            style="flex:1;height:80rpx;border-radius:20rpx;display:flex;align-items:center;justify-content:center;font-size:28rpx;font-weight:600;background:{{selectedColor}}20;color:{{selectedColor}};border:1.5rpx solid {{selectedColor}}40;{{!qrCodePath?'opacity:0.4':''}}"
+            bindtap="onShareQRImage"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >发给好友</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 自定义时间选择器 -->
+  <view class="time-picker-mask" wx:if="{{pickerVisible}}" bindtap="onPickerCancel">
+    <view class="time-picker-sheet" catchtap="">
+      <view class="time-picker-header">
+        <view class="time-picker-cancel" bindtap="onPickerCancel" hover-class="press-text" hover-stay-time="80">取消</view>
+        <view class="time-picker-title">选择时间</view>
+        <view class="time-picker-confirm" style="color:{{selectedColor}}" bindtap="onPickerConfirm" hover-class="press-text" hover-stay-time="80">确定</view>
+      </view>
+      <view class="picker-col-labels">
+        <text class="picker-col-label">时</text>
+        <text class="picker-col-label">分</text>
+      </view>
+      <picker-view
+        class="time-picker-view"
+        value="{{pickerVal}}"
+        bindchange="onPickerChange"
+        indicator-style="height: 96rpx; border-top: 2rpx solid #F0F0F0; border-bottom: 2rpx solid #F0F0F0;"
+      >
+        <picker-view-column>
+          <view class="picker-item" wx:for="{{pickerHours}}" wx:key="*this">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view class="picker-item" wx:for="{{pickerMinutes}}" wx:key="*this">{{item}}</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+  </view>
+</view>

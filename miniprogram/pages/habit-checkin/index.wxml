@@ -1,0 +1,293 @@
+<view class="page">
+  <!-- 固定返回键，始终显示在顶部绿色区域 -->
+  <view class="page-nav-fixed" style="background: {{navBg}}; padding-top: {{navTopPadding}}px;">
+    <view class="page-nav-row">
+      <view class="page-nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+    </view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="header" style="background: {{initialColor}}; padding-top: {{navBarHeightPx}}px; padding-bottom: 44rpx; border-radius: 0 0 40rpx 40rpx;"></view>
+  </block>
+
+  <block wx:elif="{{loadError}}">
+    <view class="loading-wrap"><text class="loading-text">加载失败，请返回重试</text></view>
+  </block>
+
+  <block wx:elif="{{habit}}">
+
+    <!-- ===== 头部（随页面滚动）===== -->
+    <view class="header" style="background: linear-gradient(180deg, {{habit.color}} {{navBarHeightPx}}px, {{habit.color}}BB 100%); padding-top: {{navBarHeightPx}}px">
+      <view class="header-icon-wrap">
+        <text class="header-icon">{{habit.icon}}</text>
+      </view>
+      <view class="header-name">{{habit.name}}</view>
+      <view class="header-sub">
+        <text>{{habit.frequency.type === 'daily' ? '每天打卡' : '每周' + habit.frequency.days.length + '天'}}</text>
+        <text wx:if="{{streak > 0}}" class="streak-badge">🔥 {{streak}} 天连续</text>
+      </view>
+      <view class="header-goal" wx:if="{{habit.goal}}">{{habit.goal}}</view>
+    </view>
+
+    <!-- ===== 7天状态 ===== -->
+    <view class="status-card">
+      <view class="status-row">
+        <text class="status-label">今日状态</text>
+        <view class="status-badge {{checked ? 'badge-done' : 'badge-todo'}}">
+          {{checked ? '已打卡 ✓' : '未打卡'}}
+        </view>
+      </view>
+      <view class="recent-days">
+        <view class="day-dot {{item.isToday ? 'dot-today' : ''}}" wx:for="{{recentDays}}" wx:key="date">
+          <view class="dot-circle" style="{{item.done ? 'background:' + habit.color : ''}}"></view>
+          <text class="dot-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 计时器 ===== -->
+    <view class="timer-card">
+
+      <!-- 圆环（所有计时状态都显示） -->
+      <view class="ring-container">
+        <!-- 进度轨道 -->
+        <view class="ring-track"></view>
+        <!-- 彩色进度环 -->
+        <view
+          class="ring-progress"
+          style="border-color: {{habit.color}}; opacity: {{timerState === 'idle' ? '0.25' : '1'}}"
+        ></view>
+
+        <!-- 内容 -->
+        <view class="ring-inner">
+          <block wx:if="{{timerState === 'idle'}}">
+            <text class="time-num idle-num">{{selectedPreset > 0 ? presetTimeDisplay : '00:00'}}</text>
+            <text class="time-hint">选择时长后开始</text>
+          </block>
+          <block wx:elif="{{timerState === 'running' || timerState === 'paused'}}">
+            <text class="time-num" style="color: {{habit.color}}">{{timeDisplay}}</text>
+            <text class="time-hint {{timerState === 'paused' ? 'hint-paused' : 'hint-running'}}">
+              {{timerState === 'paused' ? '⏸ 已暂停' : '专注中'}}
+            </text>
+          </block>
+          <block wx:elif="{{timerState === 'done'}}">
+            <text class="done-check" style="color: {{habit.color}}">✓</text>
+            <text class="time-hint done-hint">{{actualTimeStr}}</text>
+          </block>
+          <block wx:else>
+            <block wx:if="{{actualSeconds > 0}}">
+              <text class="skip-dur">{{actualTimeStr}}</text>
+              <text class="time-hint">已用时</text>
+            </block>
+            <block wx:else>
+              <text class="time-num idle-num">—</text>
+              <text class="time-hint">未计时</text>
+            </block>
+          </block>
+        </view>
+      </view>
+
+      <!-- idle: 预设选择 -->
+      <block wx:if="{{timerState === 'idle'}}">
+        <view class="preset-row">
+          <view
+            class="preset-btn {{selectedPreset === item.value ? 'preset-active' : ''}}"
+            wx:for="{{presets}}"
+            wx:key="value"
+            style="{{selectedPreset === item.value ? 'background:' + habit.color + ';border-color:' + habit.color + ';color:#fff' : ''}}"
+            bindtap="onSelectPreset"
+            data-value="{{item.value}}"
+            hover-class="press-sm"
+            hover-stay-time="60"
+          >{{item.label}}</view>
+        </view>
+        <view class="custom-wrap" wx:if="{{selectedPreset === -1}}">
+          <input
+            class="custom-input"
+            type="number"
+            placeholder="输入分钟数"
+            value="{{customMinutes}}"
+            bindinput="onCustomInput"
+          />
+          <text class="custom-unit">分钟</text>
+        </view>
+        <view class="ctrl-row">
+          <button
+            class="btn-start"
+            style="background: linear-gradient(135deg, {{habit.color}}, {{habit.color}}CC); box-shadow: 0 1rpx 0 rgba(0,0,0,0.1), 0 8rpx 24rpx {{habit.color}}55, inset 0 1rpx 0 rgba(255,255,255,0.20);"
+            bindtap="onStartTimer"
+          hover-class="press"
+          hover-stay-time="100"
+          >开始计时</button>
+        </view>
+        <!-- 不计时：直接填写时长 -->
+        <view class="manual-row">
+          <text class="manual-label">或填写时长</text>
+          <view class="manual-input-wrap">
+            <input class="manual-input" type="number" placeholder="0" value="{{manualMinutes}}" bindinput="onManualMinutesInput" maxlength="4"/>
+            <text class="manual-unit">分</text>
+          </view>
+          <view class="manual-btn" style="background:{{habit.color}}22;color:{{habit.color}}" bindtap="onDirectCheckin" hover-class="press-sm" hover-stay-time="80">直接打卡</view>
+        </view>
+      </block>
+
+      <!-- running / paused: 控制按钮 -->
+      <block wx:elif="{{timerState === 'running' || timerState === 'paused'}}">
+        <view class="ctrl-row">
+          <view class="ctrl-btn pause-btn" bindtap="onTogglePause" hover-class="press-sm" hover-stay-time="80">
+            {{timerState === 'paused' ? '▶ 继续' : '⏸ 暂停'}}
+          </view>
+          <view class="ctrl-btn stop-btn" bindtap="onAbandon" hover-class="press-sm" hover-stay-time="80">✕ 取消</view>
+        </view>
+        <text class="paused-for-tip" wx:if="{{timerState === 'paused' && pausedForStr}}">{{pausedForStr}}</text>
+        <text class="timer-tip" wx:else>息屏、切换页面均不影响计时</text>
+      </block>
+
+      <!-- done: 提示 -->
+      <block wx:elif="{{timerState === 'done'}}">
+        <text class="done-congrats">⏰ 时间到！打卡完成</text>
+      </block>
+
+    </view>
+
+    <!-- ===== 打卡详情 ===== -->
+    <view
+      class="note-card"
+      wx:if="{{timerState !== 'running' && timerState !== 'paused'}}"
+    >
+      <view class="note-title">打卡详情</view>
+
+      <!-- 拍照记录 -->
+      <view class="photo-section">
+        <view class="photo-grid" wx:if="{{photos.length > 0}}">
+          <view class="photo-item" wx:for="{{photos}}" wx:for-item="purl" wx:for-index="pi" wx:key="pi">
+            <image class="photo-img" src="{{purl}}" mode="aspectFill" bindtap="onPreviewCheckinPhoto" data-index="{{pi}}"/>
+            <view class="photo-remove" catchtap="onRemovePhoto" data-index="{{pi}}">×</view>
+          </view>
+        </view>
+        <view
+          class="photo-add-btn {{uploadingPhoto ? 'photo-add-dim' : ''}}"
+          bindtap="onAddPhoto"
+          hover-class="press-sm"
+          hover-stay-time="80"
+          wx:if="{{photos.length < 9}}"
+        >
+          <text class="photo-add-icon">📷</text>
+          <text class="photo-add-text">{{uploadingPhoto ? '上传中...' : '拍照记录'}}</text>
+        </view>
+      </view>
+
+      <textarea
+        class="note-input"
+        placeholder="记录今天的感受、进度、心情..."
+        value="{{note}}"
+        bindinput="onNoteInput"
+        maxlength="300"
+        auto-height
+      />
+    </view>
+
+    <!-- ===== 底部操作 ===== -->
+    <view class="action-wrap">
+      <block wx:if="{{timerState === 'done' || timerState === 'skip'}}">
+        <button
+          class="btn-main {{saving ? 'btn-dim' : ''}}"
+          style="background: linear-gradient(135deg, {{habit.color}}, {{habit.color}}CC); box-shadow: 0 1rpx 0 rgba(0,0,0,0.1), 0 8rpx 28rpx {{habit.color}}55, inset 0 1rpx 0 rgba(255,255,255,0.20);"
+          bindtap="onCheckin"
+          disabled="{{saving}}"
+          hover-class="press"
+          hover-stay-time="100"
+        >{{saving ? '打卡中...' : (checked ? '再次打卡' : '完成打卡')}}</button>
+        <view class="btn-discard" bindtap="onDiscardTimer" hover-class="press-sm" hover-stay-time="80">不计入打卡</view>
+      </block>
+      <block wx:elif="{{timerState === 'idle'}}">
+        <view class="btn-quick-checkin" style="color:{{habit.color}};border-color:{{habit.color}}22;background:{{habit.color}}10" bindtap="onQuickCheckin" hover-class="press-sm" hover-stay-time="80">不计时打卡</view>
+      </block>
+    </view>
+
+    <!-- ===== 今日打卡记录 ===== -->
+    <view class="history-card">
+      <view class="history-title-row" style="background: {{habit.color}}25">
+        <view class="history-title-bar" style="background:{{habit.color}}"></view>
+        <text class="history-title">今日打卡记录</text>
+      </view>
+      <view class="history-empty" wx:if="{{historyItems.length === 0}}">
+        <text class="history-empty-text">暂无</text>
+      </view>
+      <view class="history-item" wx:for="{{historyItems}}" wx:key="_id">
+        <view class="hist-info">
+          <text class="hist-idx">{{item.timeStr}}</text>
+          <text class="hist-dur">{{item.durationStr}}</text>
+          <text class="hist-note" wx:if="{{item.note}}">{{item.note}}</text>
+        </view>
+        <view class="hist-actions">
+          <view
+            class="hist-edit"
+            style="color:{{habit.color}};background:{{habit.color}}12"
+            catchtap="onEditHistItem"
+            data-id="{{item._id}}"
+            hover-class="press-sm"
+            hover-stay-time="60"
+          >编辑</view>
+          <view
+            class="hist-cancel"
+            catchtap="onUncheckinItem"
+            data-id="{{item._id}}"
+            hover-class="press-sm"
+            hover-stay-time="60"
+          >取消</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 编辑打卡记录弹窗 -->
+    <view class="edit-hist-mask" wx:if="{{editingHistId}}" catchtap="onHideEditItem" catchtouchmove="noop">
+      <view class="edit-hist-box" catchtap="noop">
+        <view class="edit-hist-title">编辑打卡记录</view>
+        <view class="edit-hist-row">
+          <text class="edit-hist-label">时长（分）</text>
+          <input class="edit-hist-input" type="number" placeholder="未记录" value="{{editingMinutes}}" bindinput="onEditMinutesInput" maxlength="4" adjust-position/>
+        </view>
+        <view class="edit-hist-row">
+          <text class="edit-hist-label">备注</text>
+          <input class="edit-hist-input" placeholder="添加备注..." value="{{editingNote}}" bindinput="onEditNoteInput" maxlength="100" adjust-position/>
+        </view>
+        <!-- 照片 -->
+        <view class="edit-hist-photo-row">
+          <view class="edit-hist-photo-item" wx:for="{{editingPhotos}}" wx:key="*this" wx:for-index="epi">
+            <image class="edit-hist-photo-img" src="{{item}}" mode="aspectFill" catchtap="onPreviewEditPhoto" data-index="{{epi}}"/>
+            <view class="edit-hist-photo-rm" catchtap="onRemoveEditPhoto" data-index="{{epi}}">×</view>
+          </view>
+          <view
+            wx:if="{{editingPhotos.length < 9}}"
+            class="edit-hist-photo-add {{uploadingEditPhoto ? 'edit-hist-photo-dim' : ''}}"
+            style="border-color:{{habit.color}}44;color:{{habit.color}}"
+            catchtap="onAddEditPhoto"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >
+            <text>{{uploadingEditPhoto ? '…' : '+'}}</text>
+          </view>
+        </view>
+        <view class="edit-hist-actions">
+          <view class="edit-hist-cancel" catchtap="onHideEditItem" hover-class="press-sm" hover-stay-time="80">取消</view>
+          <view class="edit-hist-save {{savingEdit ? 'edit-hist-save-dim' : ''}}" style="background:linear-gradient(135deg,{{habit.color}},{{habit.color}}CC);box-shadow:0 4rpx 16rpx {{habit.color}}44" catchtap="onSaveHistItem" hover-class="press-sm" hover-stay-time="80">{{savingEdit ? '保存中...' : '保存'}}</view>
+        </view>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- 成就解锁弹窗 -->
+  <view class="badge-popup" wx:if="{{showBadgePopup}}" catchtouchmove="noop" bindtap="onCloseBadgePopup">
+    <view class="badge-popup-card" catchtap="onCloseBadgePopup">
+      <view class="bp-unlock-lbl">恭喜您{{newBadge.desc}}，</view>
+      <view class="bp-icon">{{newBadge.icon}}</view>
+      <view class="bp-name">【{{newBadge.name}}】</view>
+      <view class="bp-desc">荣誉称号已解锁！</view>
+      <view class="bp-unlock-lbl" style="margin-top:6rpx">可在统计和好友页面展示哦~</view>
+      <view class="bp-tap-hint">轻触关闭</view>
+    </view>
+  </view>
+
+</view>

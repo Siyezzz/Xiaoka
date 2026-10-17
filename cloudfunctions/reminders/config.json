@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "openapi": ["subscribeMessage.send"]
+  },
+  "timeout": 20,
+  "triggers": [
+    {
+      "name": "reminder_cron",
+      "type": "timer",
+      "config": "0 * * * * * *"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+<view class="success-overlay" wx:if="{{showSuccess}}">
+  <view class="success-card">
+    <text class="success-emoji">🎉</text>
+    <text class="success-title">保存成功</text>
+    <text class="success-sub">开启你的元气打卡之旅吧！</text>
+  </view>
+</view>
+
+<view class="page">
+  <view style="height: {{statusBarHeight + 24}}px"></view>
+
+  <view class="content">
+    <view class="top-tag">最后一步 ✨</view>
+    <view class="title">设置头像和昵称</view>
+    <view class="sub">好友会看到你的头像和昵称</view>
+
+    <view class="avatar-wrap">
+      <!-- z-index 1: centered placeholder shown when no avatar -->
+      <view wx:if="{{!tempAvatarUrl}}" class="avatar-placeholder">
+        <text class="avatar-cam">📷</text>
+        <text class="avatar-hint">点击选择</text>
+      </view>
+      <!-- z-index 1: selected avatar image -->
+      <image wx:if="{{tempAvatarUrl}}" class="avatar-img-overlay" src="{{tempAvatarUrl}}" mode="aspectFill"/>
+      <!-- z-index 5: invisible button on top — only captures taps -->
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+      <!-- z-index 10: upload progress overlay -->
+      <view class="upload-indicator" wx:if="{{uploading}}">上传中…</view>
+    </view>
+
+    <view class="nickname-wrap">
+      <input
+        class="nickname-input"
+        type="nickname"
+        placeholder="输入你的昵称"
+        placeholder-class="nick-ph"
+        value="{{tempNickname}}"
+        bindinput="onNicknameInput"
+        bindblur="onNicknameBlur"
+        maxlength="20"
+      />
+    </view>
+
+    <button
+      class="save-btn"
+      bindtap="onSave"
+      loading="{{saving}}"
+      disabled="{{saving}}"
+      hover-class="btn-press"
+      hover-stay-time="100"
+    >完成设置</button>
+
+  </view>
+</view>

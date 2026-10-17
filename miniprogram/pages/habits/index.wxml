@@ -1,0 +1,100 @@
+<page-meta enable-scroll="{{!dragging}}"></page-meta>
+<view class="page">
+  <view class="page-header">
+    <view style="height: {{statusBarHeight}}px"></view>
+    <view class="header-title-row">
+      <view class="header-title">我的习惯</view>
+      <view class="tut-pill-btn" bindtap="onShowTutorial" hover-class="tut-pill-press" hover-stay-time="80">教程</view>
+      <view class="tut-pill-btn" bindtap="onShowAbout" hover-class="tut-pill-press" hover-stay-time="80">关于</view>
+      <view class="inbox-badge" wx:if="{{inboxUnreadCount > 0}}">
+        <text class="inbox-badge-text">{{inboxUnreadCount > 99 ? '99+' : inboxUnreadCount}}</text>
+      </view>
+    </view>
+    <view class="header-sub">{{habits.length}} 个习惯</view>
+    <view wx:if="{{isAuthor}}" class="founder-greeting">欢迎，创始人(´▽`ʃ♡ƪ)</view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-wrap">
+      <view class="loading-text">加载中...</view>
+    </view>
+  </block>
+
+  <block wx:elif="{{habits.length === 0}}">
+    <view class="empty-state">
+      <view class="empty-icon">✨</view>
+      <view class="empty-text">开始建立你的第一个习惯</view>
+      <view class="empty-sub">坚持就是力量，从今天开始</view>
+      <button class="btn-add-first" bindtap="onAddHabit" hover-class="press" hover-stay-time="100">+ 添加习惯</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section-header">
+      <view class="section-title">所有</view>
+      <view class="manage-btn {{manageMode ? 'manage-active' : ''}}" bindtap="onToggleManage" hover-class="press-sm" hover-stay-time="80">
+        {{manageMode ? '完成' : '管理'}}
+      </view>
+    </view>
+    <view class="habit-list">
+      <view
+        class="habit-item {{manageMode && index === dragIdx ? 'habit-dragging' : ''}}"
+        wx:for="{{habits}}"
+        wx:key="_id"
+        bindtap="onEditHabit"
+        data-id="{{item._id}}"
+        hover-class="{{manageMode ? '' : 'habit-hover'}}"
+        hover-stay-time="120"
+      >
+        <view class="habit-main">
+          <view class="habit-icon-wrap" style="background: {{item.color}}44">
+            <text class="habit-icon">{{item.icon}}</text>
+          </view>
+          <view class="habit-info">
+            <view class="habit-name-row">
+              <text class="habit-name">{{item.name}}</text>
+              <text class="habit-goal" wx:if="{{item.goal}}" style="color:{{item.color}}">{{item.goal}}</text>
+            </view>
+            <view class="habit-freq">
+              <text>{{item.frequency.type === 'daily' ? '每天' : (item.frequency.type === 'free' ? '自由打卡' : '每周' + item.frequency.days.length + '天')}}</text>
+              <view wx:if="{{item.streak > 0}}" class="habit-streak-pill" style="background:{{item.color}}18;color:{{item.color}}">
+                <text class="streak-pill-num">{{item.streak}}</text>
+                <text class="streak-pill-unit">天</text>
+              </view>
+            </view>
+          </view>
+          <view class="arrow" wx:if="{{!manageMode}}">›</view>
+          <view wx:if="{{manageMode}}" class="manage-controls">
+            <view class="habit-del-badge" catchtap="onDeleteHabit" data-id="{{item._id}}" data-name="{{item.name}}" hover-class="press-sm" hover-stay-time="80">✕</view>
+            <view class="drag-handle" catchtouchstart="onDragStart" catchtouchmove="onDragMove" catchtouchend="onDragEnd" catchtouchcancel="onDragEnd" catchtap="noop" data-idx="{{index}}">≡</view>
+          </view>
+        </view>
+        <!-- 近七天照片记录 -->
+        <view class="photo-strip" wx:if="{{item.recentPhotos.length > 0}}" catchtap="noop">
+          <view class="photo-strip-label">近七天照片记录</view>
+          <scroll-view scroll-x class="photo-scroll">
+            <view
+              wx:for="{{item.recentPhotos}}"
+              wx:for-item="purl"
+              wx:for-index="pi"
+              wx:key="pi"
+              class="photo-thumb-wrap"
+              catchtap="onPreviewPhoto"
+              data-habitid="{{item._id}}"
+              data-index="{{pi}}"
+            >
+              <image class="photo-thumb" src="{{purl.url || purl}}" mode="aspectFill"/>
+              <text class="photo-ts" wx:if="{{purl.dateLabel}}">{{purl.dateLabel}}</text>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- FAB 添加按钮 -->
+  <view class="fab" bindtap="onAddHabit" hover-class="fab-hover" hover-stay-time="100">
+    <text class="fab-icon">＋</text>
+  </view>
+
+</view>

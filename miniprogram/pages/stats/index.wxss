@@ -1,0 +1,781 @@
+.page {
+  min-height: 100vh;
+  background: #EBF8F2;
+  padding-bottom: 200rpx;
+  overflow-x: hidden;
+}
+
+.page-header {
+  padding: 20rpx 40rpx 56rpx;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 45%),
+    linear-gradient(150deg, #3AC99E 0%, #22B085 60%, #189D74 100%);
+  border-radius: 0 0 40rpx 40rpx;
+}
+
+.header-title {
+  font-size: 45rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6rpx;
+}
+
+.header-sub {
+  font-size: 30rpx;
+  color: rgba(255,255,255,0.85);
+}
+
+/* 习惯选择 */
+.habit-scroll {
+  white-space: nowrap;
+  margin-top: 36rpx;
+}
+
+.habit-tabs { display: inline-flex; gap: 14rpx; padding: 8rpx 32rpx 16rpx; }
+
+.habit-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  height: 72rpx;
+  padding: 0 30rpx;
+  border-radius: 36rpx;
+  background: #fff;
+  border: none;
+  font-size: 27rpx;
+  color: #555;
+  white-space: nowrap;
+  box-shadow:
+    0 0 0 1.5rpx rgba(0,0,0,0.06),
+    0 3rpx 0 rgba(0,0,0,0.06),
+    0 6rpx 16rpx rgba(0,0,0,0.07);
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform;
+}
+
+.tab-active {
+  font-weight: 700;
+}
+
+.tab-deleted {
+  opacity: 0.65;
+}
+
+/* 已删除折叠按钮 */
+.tab-folder {
+  background: #EFEFEF;
+  color: #888;
+  gap: 10rpx;
+}
+
+.tab-folder-open {
+  background: #E4E4E8;
+}
+
+.folder-label {
+  font-size: 27rpx;
+  color: #888;
+}
+
+.folder-badge {
+  background: #C4C4C4;
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: 700;
+  min-width: 32rpx;
+  height: 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8rpx;
+  line-height: 1;
+}
+
+.folder-arrow {
+  font-size: 18rpx;
+  color: #AAA;
+}
+
+/* 已删除习惯展开行 */
+.deleted-row {
+  padding: 12rpx 32rpx 20rpx;
+  background: #F0F1F6;
+  border-bottom: 1rpx solid #E6E6EE;
+}
+
+.deleted-scroll {
+  white-space: nowrap;
+}
+
+.deleted-tabs {
+  padding-bottom: 4rpx;
+}
+
+.tab-recover-btn {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #45C5A0;
+  background: rgba(69,197,160,0.14);
+  border-radius: 50%;
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tab-del-btn {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #FF6B6B;
+  background: rgba(255,107,107,0.12);
+  border-radius: 50%;
+  width: 36rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* 统计内容区淡入淡出包装 */
+.stats-body {
+  transition: opacity 0.18s ease;
+}
+.stats-body-loading {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* 数据行 (3列) */
+.stats-row {
+  display: flex;
+  align-items: center;
+  border-radius: 24rpx;
+  margin: 20rpx 32rpx 0;
+  padding: 32rpx 0;
+  background: #FFFFFF;
+  box-shadow:
+    0 1rpx 2rpx rgba(0,0,0,0.06),
+    0 4rpx 12rpx rgba(0,0,0,0.08),
+    0 16rpx 40rpx rgba(0,0,0,0.06);
+}
+
+.stat-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 56rpx;
+  background: #F0F0F0;
+  flex-shrink: 0;
+}
+
+.stat-value {
+  font-size: 56rpx;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-label { font-size: 24rpx; color: #AAA; }
+
+/* 成就徽章 */
+.badge-section { padding: 28rpx 32rpx; }
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+}
+
+.badge-ico-wrap {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 20rpx;
+  background: rgba(247,151,30,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badge-ico-empty { background: rgba(0,0,0,0.04); }
+
+.badge-ico { font-size: 38rpx; }
+
+.badge-body { flex: 1; }
+
+.badge-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+
+.badge-name-empty { color: #CCC; }
+
+.badge-desc {
+  font-size: 22rpx;
+  color: #AAA;
+  margin-top: 6rpx;
+}
+
+.badge-count-btn {
+  font-size: 23rpx;
+  color: #45C5A0;
+  font-weight: 600;
+  flex-shrink: 0;
+  padding: 8rpx 18rpx;
+  background: rgba(69,197,160,0.10);
+  border-radius: 22rpx;
+}
+
+@keyframes badge-sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes badge-mask-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 徽章选择器 */
+.badge-picker-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.38);
+  display: flex;
+  align-items: flex-end;
+  z-index: 2000;
+  animation: badge-mask-in 0.22s ease both;
+}
+
+.badge-picker-sheet {
+  width: 100%;
+  animation: badge-sheet-up 0.30s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  background: #fff;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 36rpx 0 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  max-height: 72vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.badge-picker-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx 28rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.badge-picker-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.badge-picker-close {
+  font-size: 28rpx;
+  color: #BBB;
+  padding: 8rpx 12rpx;
+}
+
+.badge-picker-list { height: 52vh; overflow: hidden; }
+
+.badge-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid #F7F7F7;
+}
+
+.bp-item-sel { background: #F0FBF8; }
+
+.bp-item-ico { font-size: 40rpx; flex-shrink: 0; }
+
+.bp-item-body { flex: 1; }
+
+.bp-item-name { font-size: 28rpx; font-weight: 700; color: #333; }
+
+.bp-item-desc { font-size: 22rpx; color: #AAA; margin-top: 4rpx; }
+
+.bp-item-check { font-size: 32rpx; color: #45C5A0; font-weight: 700; flex-shrink: 0; }
+
+/* 卡片 */
+.card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 20rpx 32rpx 0;
+  box-shadow:
+    0 1rpx 2rpx rgba(0,0,0,0.06),
+    0 4rpx 12rpx rgba(0,0,0,0.08),
+    0 16rpx 40rpx rgba(0,0,0,0.06);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+/* 近7天时长卡片 背景装饰 */
+.card-dur {
+  position: relative;
+  overflow: hidden;
+}
+
+.dur-bg-grid {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -15%;
+  right: -15%;
+  pointer-events: none;
+  transform: rotate(-22deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.dur-bg-row {
+  display: flex;
+}
+
+.dur-bg-ico {
+  flex: 1;
+  text-align: center;
+}
+
+.dur-bg-row-b {
+  transform: translateX(10%);
+}
+
+.dur-bg-ico {
+  flex: 1;
+  text-align: center;
+  font-size: 30rpx;
+  opacity: 0.09;
+  line-height: 1;
+}
+
+.weekly-achieve {
+  font-size: 52rpx;
+  margin-left: 16rpx;
+  line-height: 1;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 28rpx;
+}
+
+/* 柱状图 */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 160rpx;
+  margin-bottom: 16rpx;
+}
+
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  height: 100%;
+}
+
+.bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar { width: 56%; border-radius: 8rpx 8rpx 0 0; }
+.bar-done { height: 100%; }
+.bar-miss { height: 60%; background: #FFE4E4; }
+.bar-skip { height: 25%; background: #F0F0F0; }
+
+.bar-label { font-size: 22rpx; color: #BBB; }
+.label-today { color: #45C5A0; font-weight: 700; }
+
+.bar-legend { display: flex; gap: 32rpx; justify-content: center; margin-top: 16rpx; }
+.legend-item { display: flex; align-items: center; gap: 8rpx; font-size: 22rpx; color: #AAA; }
+.legend-dot { width: 16rpx; height: 16rpx; border-radius: 50%; }
+.legend-dot.miss { background: #FFE4E4; }
+.legend-dot.skip { background: #F0F0F0; }
+
+/* 近7天双视图 */
+.weekly-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.weekly-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.weekly-toggle {
+  font-size: 24rpx;
+  color: #AAA;
+  display: inline-block;
+}
+
+.toggle-bounce {
+  animation: toggleBounce 0.28s ease forwards;
+}
+
+@keyframes toggleBounce {
+  0%   { opacity: 1; }
+  30%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.weekly-total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8rpx;
+  margin: 24rpx 0 12rpx;
+}
+
+.weekly-num {
+  font-size: 88rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.weekly-unit {
+  font-size: 30rpx;
+  color: #999;
+}
+
+.weekly-sub {
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  color: #AAA;
+  margin-bottom: 24rpx;
+}
+
+.card-press { opacity: 0.88; transform: scale(0.988); }
+
+.dur-top-label {
+  font-size: 18rpx;
+  color: #888;
+  text-align: center;
+  height: 22rpx;
+  line-height: 22rpx;
+}
+
+.dur-chart {
+  height: 180rpx;
+  border-bottom: 2rpx solid #F0F0F0;
+  margin-bottom: 0;
+}
+
+/* 双视图固定高度容器，absolute 切换消除格子大小变化 */
+.weekly-content {
+  position: relative;
+  height: 200rpx;
+}
+.weekly-view-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.25s ease;
+}
+.weekly-panel-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== 多习惯日历 ===== */
+.cal-card { padding-bottom: 28rpx; margin-bottom: 32rpx; }
+
+/* 月份导航行 */
+.cal-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.cal-month-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.cal-nav-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #444;
+  font-weight: 600;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.nav-btn-disabled { opacity: 0.2; pointer-events: none; }
+
+/* 图例 */
+.cal-legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.legend-habit {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.legend-habit-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-habit-name {
+  font-size: 22rpx;
+  color: #888;
+}
+
+.cal-week-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+  padding: 0 2rpx;
+}
+
+.cal-week-label {
+  flex: 1;
+  text-align: center;
+  font-size: 20rpx;
+  color: #CCC;
+  font-weight: 600;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(80rpx, auto);
+  gap: 6rpx;
+}
+
+/* 日历格 */
+.cal-cell {
+  background: #FAFAFA;
+  border-radius: 10rpx;
+  padding: 8rpx 4rpx 6rpx;
+  min-height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.cell-today {
+  background: #F0FBF8;
+  border: 1rpx solid #45C5A040;
+}
+
+.cell-padding {
+  background: transparent;
+  opacity: 0.0;
+}
+
+.cell-future {
+  opacity: 0.28;
+}
+
+.cal-day {
+  font-size: 20rpx;
+  color: #999;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.day-today {
+  color: #45C5A0;
+  font-weight: 700;
+}
+
+/* 彩色点阵 */
+.cal-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rpx;
+  justify-content: center;
+  min-height: 22rpx;
+}
+
+.cal-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cal-extra {
+  font-size: 14rpx;
+  color: #AAA;
+  line-height: 1;
+  align-self: center;
+}
+
+/* 空状态 / 加载 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 40rpx;
+}
+
+.empty-icon { font-size: 120rpx; margin-bottom: 24rpx; }
+.empty-text { font-size: 32rpx; font-weight: 600; color: #555; margin-bottom: 12rpx; }
+.empty-sub { font-size: 26rpx; color: #AAA; }
+
+.loading-wrap { display: flex; justify-content: center; padding: 80rpx; }
+.loading-text { font-size: 28rpx; color: #CCC; }
+
+/* 可点击的日历格 */
+.cell-tappable { cursor: pointer; transition: opacity 0.1s ease, transform 0.1s ease; -webkit-tap-highlight-color: transparent; }
+.cell-press { transform: scale(0.92); opacity: 0.7; background: transparent; }
+
+.day-sheet-close { transition: opacity 0.15s, transform 0.15s; }
+
+/* ===== 日期详情弹窗 ===== */
+.day-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.38);
+  display: flex;
+  align-items: flex-end;
+  z-index: 2000;
+  animation: badge-mask-in 0.22s ease both;
+}
+
+.day-sheet {
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  border-radius: 40rpx 40rpx 0 0;
+  width: 100%;
+  padding: 36rpx 0 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1rpx solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  animation: badge-sheet-up 0.30s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.day-sheet-list { }
+
+.day-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+  padding: 0 32rpx;
+}
+
+.day-sheet-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.day-sheet-close {
+  font-size: 30rpx;
+  color: #BBB;
+  padding: 8rpx 12rpx;
+}
+
+.day-sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 22rpx 32rpx;
+  border-bottom: 1rpx solid #F3F3F3;
+}
+
+.day-item-icon-wrap {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.day-item-icon { font-size: 38rpx; }
+
+.day-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.day-item-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.day-item-miss { color: #BBB; }
+
+.day-item-meta {
+  font-size: 24rpx;
+  color: #45C5A0;
+}
+
+.day-item-note {
+  font-size: 22rpx;
+  color: #888;
+}
+
+.day-item-badge {
+  font-size: 34rpx;
+  font-weight: 700;
+  width: 52rpx;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.badge-done { color: #45C5A0; }
+.badge-miss { color: #DDD; }

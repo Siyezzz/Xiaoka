@@ -1,0 +1,49 @@
+<view class="page">
+  <!-- 固定导航栏 -->
+  <view class="nav-fixed" style="padding-top: {{navTopPadding}}px">
+    <view class="nav-row">
+      <view class="nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+      <view class="nav-title">关于</view>
+      <view class="nav-back" style="opacity:0">‹</view>
+    </view>
+  </view>
+
+  <view style="height: {{navBarHeightPx}}px"></view>
+
+  <!-- 版本信息 -->
+  <view class="card mt24">
+    <view class="card-row">
+      <text class="card-label">当前版本</text>
+      <text class="card-value">{{currentVersion}}</text>
+    </view>
+    <view class="card-sep"></view>
+    <view class="card-row">
+      <text class="card-label">最新版本</text>
+      <view class="card-right">
+        <text wx:if="{{checking}}" class="hint-gray">检查中…</text>
+        <block wx:elif="{{hasUpdate}}">
+          <text class="hint-orange">有新版本</text>
+          <view class="update-btn" bindtap="onApplyUpdate" hover-class="press-sm" hover-stay-time="80">立即更新</view>
+        </block>
+        <text wx:elif="{{latestVersion && latestVersion !== currentVersion}}" class="hint-orange">v{{latestVersion}} 可用</text>
+        <text wx:else class="hint-green">已是最新 ✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容导航 -->
+  <view class="card mt16">
+    <view class="nav-item" bindtap="onGoAuthorMessage" hover-class="nav-item-press" hover-stay-time="150">
+      <text class="nav-item-label">作者的话</text>
+      <text class="nav-arrow">›</text>
+    </view>
+    <view class="card-sep"></view>
+    <view class="nav-item" bindtap="onGoInbox" hover-class="nav-item-press" hover-stay-time="150">
+      <view class="nav-item-left">
+        <text class="nav-item-label">站内短信</text>
+        <view wx:if="{{inboxDot}}" class="inbox-reply-dot"></view>
+      </view>
+      <text class="nav-arrow">›</text>
+    </view>
+  </view>
+</view>

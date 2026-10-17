@@ -1,0 +1,48 @@
+
+{
+  "pages": [
+    "pages/index/index",
+    "pages/habits/index",
+    "pages/stats/index",
+    "pages/social/index",
+    "pages/add-habit/index",
+    "pages/friend-habits/index",
+    "pages/habit-checkin/index",
+    "pages/tutorial/index",
+    "pages/profile-setup/index",
+    "pages/about/index",
+    "pages/author-message/index",
+    "pages/inbox/index"
+  ],
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#45C5A0",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      { "pagePath": "pages/index/index",  "text": "今日" },
+      { "pagePath": "pages/habits/index", "text": "习惯" },
+      { "pagePath": "pages/stats/index",  "text": "统计" },
+      { "pagePath": "pages/social/index", "text": "好友" }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#45C5A0",
+    "navigationBarTitleText": "习惯打卡",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F7F8FC",
+    "navigationStyle": "custom"
+  },
+  "permission": {
+    "scope.camera": {
+      "desc": "拍照记录打卡时用到"
+    },
+    "scope.writePhotosAlbum": {
+      "desc": "保存打卡图片时用到"
+    }
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

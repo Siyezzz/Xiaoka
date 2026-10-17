@@ -1,0 +1,222 @@
+<view class="page">
+  <!-- 固定返回键 -->
+  <view class="page-nav-fixed" style="padding-top: {{navTopPadding}}px">
+    <view class="page-nav-row">
+      <view class="page-nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+    </view>
+  </view>
+
+  <!-- 好友头像 + 姓名头部（padding-top 为固定 nav 高度） -->
+  <view class="friend-header" style="padding-top: {{headerPaddingTopPx}}px; {{friendColor ? 'background: linear-gradient(160deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 45%),' + friendColor : ''}}">
+    <view class="friend-av-lg-wrap" style="background: {{friendColor || '#45C5A0'}}">
+      <image wx:if="{{friendAvatarUrl}}" class="friend-av-lg-img" src="{{friendAvatarUrl}}" mode="aspectFill"/>
+      <text wx:else class="friend-av-lg-txt">{{friendName[0] || '?'}}</text>
+    </view>
+    <view class="friend-name-lg">{{friendName}}</view>
+    <view wx:if="{{friendNote}}" class="friend-note">{{friendNote}}</view>
+    <view class="friend-date">今日完成 {{doneCount}} / {{total}}</view>
+  </view>
+
+  <!-- 勋章 -->
+  <view class="badge-section" wx:if="{{friendBadge && friendBadge.icon && friendBadge.label}}">
+    <view class="badge-card">
+      <text class="badge-icon">{{friendBadge.icon}}</text>
+      <text class="badge-label">{{friendBadge.label}}</text>
+    </view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{habits.length === 0}}">
+    <view class="empty-state">
+      <view class="empty-icon">🔒</view>
+      <view class="empty-text">暂无可查看的习惯</view>
+      <view class="empty-sub">好友还没有设置分享的习惯</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- 进度条 -->
+    <view class="progress-card">
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="transform: scaleX({{progress / 100}});"></view>
+      </view>
+    </view>
+
+    <!-- 习惯卡片列表 -->
+    <view class="habit-list">
+      <view class="habit-card" wx:for="{{habits}}" wx:key="_id">
+        <view class="habit-card-main">
+          <view class="habit-icon-bg" style="background: {{item.color}}22">
+            <text class="habit-icon">{{item.icon}}</text>
+          </view>
+          <view class="habit-info">
+            <view class="habit-name">{{item.name}}</view>
+            <view class="habit-freq-row">
+              <text class="habit-freq">{{item.frequency.type === 'daily' ? '每天' : (item.frequency.type === 'free' ? '自由' : '每周' + item.frequency.days.length + '天')}}</text>
+              <text wx:if="{{item.checked}}" class="habit-checked-tag" style="color: {{item.color}}"> · 已打卡 {{item.todayCount > 1 ? item.todayCount + '次' : '✓'}}</text>
+            </view>
+          </view>
+          <view class="streak-badge" style="background: {{item.color}}18; color: {{item.color}}">
+            <text class="streak-num">{{item.totalDays}}</text>
+            <text class="streak-unit">天</text>
+          </view>
+          <view class="remind-btn" catchtap="onShowReminder" data-id="{{item._id}}" data-name="{{item.name}}" hover-class="press-sm" hover-stay-time="80">🔔</view>
+        </view>
+
+        <!-- 照片条（仅 sharePhotos 且有照片时展示） -->
+        <view class="photo-strip" wx:if="{{item.sharePhotos && item.recentPhotos && item.recentPhotos.length > 0}}">
+          <scroll-view scroll-x class="photo-scroll">
+            <view
+              wx:for="{{item.recentPhotos}}"
+              wx:for-item="purl"
+              wx:for-index="pi"
+              wx:key="pi"
+              class="photo-card"
+              catchtap="onPreviewPhoto"
+              data-habitid="{{item._id}}"
+              data-index="{{pi}}"
+            >
+              <image class="photo-card-img" src="{{purl.url || purl}}" mode="aspectFill"/>
+              <view class="photo-card-meta">
+                <text class="photo-card-time" wx:if="{{purl.dateLabel}}">{{purl.dateLabel}}</text>
+                <text class="photo-card-note" wx:if="{{purl.note}}">{{purl.note}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 点赞 / 留言 -->
+    <view class="action-footer">
+      <view class="action-btn {{liked ? 'action-liked' : ''}}" bindtap="onLikeFriend" hover-class="press-sm" hover-stay-time="80">
+        <view class="like-icon-wrap">
+          <text class="action-icon">{{liked ? '❤️' : '🤍'}}</text>
+          <text class="like-count" wx:if="{{likeCount > 0}}">+{{likeCount}}</text>
+        </view>
+        <text class="action-label">{{liked ? '已点赞' : '点赞'}}</text>
+      </view>
+      <view class="action-btn" bindtap="onShowComment" hover-class="press-sm" hover-stay-time="80">
+        <text class="action-icon">💬</text>
+        <text class="action-label">留言</text>
+      </view>
+    </view>
+    <view class="action-hint">仅对方可见</view>
+
+    <!-- 对话记录 -->
+    <view class="conversation" wx:if="{{conversation.length > 0}}">
+      <view class="conv-divider">互动记录</view>
+      <view
+        class="conv-item {{item.isMine ? 'conv-mine' : 'conv-theirs'}}"
+        wx:for="{{conversation}}"
+        wx:key="_id"
+      >
+        <view class="conv-avatar-wrap" wx:if="{{!item.isMine}}" style="background: {{item.senderColor}}">
+          <image wx:if="{{item.senderAvatar}}" class="conv-avatar-img" src="{{item.senderAvatar}}" mode="aspectFill"/>
+          <text wx:else class="conv-avatar-txt">{{item.senderInitial}}</text>
+        </view>
+        <view
+          class="conv-bubble {{item.type === 'like' ? 'conv-bubble-like' : (item.isMine ? 'conv-bubble-mine' : 'conv-bubble-theirs')}}"
+          bindtap="onTapConvForReply"
+          data-text="{{item.text}}"
+          data-habitname="{{item.habitName}}"
+          data-tiptext="{{item.tipText}}"
+          data-sendername="{{item.senderName}}"
+          data-type="{{item.type}}"
+        >
+          <text wx:if="{{item.type === 'like'}}">❤️ 点赞</text>
+          <block wx:elif="{{item.type === 'reminder' || item.type === 'reminder_sent'}}">
+            <text>🔔 提醒打卡「{{item.habitName}}」</text>
+            <text wx:if="{{item.tipText}}">：{{item.tipText}}</text>
+          </block>
+          <block wx:else>
+            <view wx:if="{{item.quoteText}}" class="conv-quote-block {{item.isMine ? 'conv-quote-mine' : 'conv-quote-theirs'}}">
+              <text>{{item.quoteText}}</text>
+            </view>
+            <text wx:if="{{item.text}}">{{item.text}}</text>
+            <image wx:if="{{item.imageUrl}}" class="conv-img" src="{{item.imageUrl}}" mode="aspectFit" catchtap="onPreviewConvImg" data-url="{{item.imageUrl}}"/>
+          </block>
+        </view>
+        <view
+          wx:if="{{item.isMine}}"
+          class="conv-del"
+          catchtap="onDeleteMessage"
+          data-id="{{item._id}}"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >✕</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 提醒弹窗 -->
+  <view class="comment-mask" wx:if="{{showReminderModal}}" catchtap="onHideReminder" catchtouchmove="noop">
+    <view class="comment-box" catchtap="noop">
+      <view class="comment-title">提醒 {{friendName}}</view>
+      <view class="comment-sub">打卡「{{reminderHabitName}}」</view>
+      <input
+        class="reminder-input"
+        placeholder="附言（选填）"
+        placeholder-class="comment-ph"
+        value="{{reminderText}}"
+        bindinput="onReminderInput"
+        maxlength="20"
+        adjust-position
+        cursor-spacing="20"
+        focus="{{true}}"
+      />
+      <view class="comment-actions">
+        <view class="comment-cancel" catchtap="onHideReminder" hover-class="press-text" hover-stay-time="80">取消</view>
+        <view class="comment-send {{sendingReminder ? 'comment-send-disabled' : ''}}" catchtap="onSendReminder" hover-class="press-sm" hover-stay-time="80">{{sendingReminder ? '发送中...' : '发送提醒'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 留言弹窗 -->
+  <view class="comment-mask" wx:if="{{showComment}}" catchtap="onHideComment" catchtouchmove="noop">
+    <view class="comment-box" catchtap="noop">
+      <view class="comment-title">给 {{friendName}} 留言</view>
+      <view class="comment-sub">仅对方可见</view>
+      <view wx:if="{{commentQuote}}" class="comment-quote-chip">
+        <text class="comment-quote-text">回复 {{commentQuote.sender}}：{{commentQuote.preview}}</text>
+        <text class="comment-quote-del" catchtap="onClearQuote">×</text>
+      </view>
+      <textarea
+        class="comment-input"
+        placeholder="{{commentQuote ? '回复内容...' : '说点什么...'}}"
+        placeholder-class="comment-ph"
+        maxlength="200"
+        value="{{commentText}}"
+        bindinput="onCommentInput"
+        adjust-position
+        cursor-spacing="20"
+        auto-focus="{{true}}"
+      />
+      <view class="comment-actions">
+        <view class="comment-cancel" catchtap="onHideComment" hover-class="press-text" hover-stay-time="80">取消</view>
+        <view
+          class="comment-send {{sendingComment ? 'comment-send-disabled' : ''}}"
+          catchtap="onSendComment"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >{{sendingComment ? '发送中...' : '发送'}}</view>
+      </view>
+    </view>
+  </view>
+
+<!-- 图片预览弹窗 -->
+<view class="photo-preview-mask" wx:if="{{showPhotoPreview}}" catchtap="onClosePhotoPreview" catchtouchmove="noop">
+  <view class="photo-preview-wrap" catchtap="noop">
+    <image class="preview-img" src="{{previewPhoto.url}}" mode="aspectFit" />
+    <view class="preview-info">
+      <view class="preview-time">{{previewPhoto.date}} {{previewPhoto.timeStr}}</view>
+      <view class="preview-note" wx:if="{{previewPhoto.note}}">{{previewPhoto.note}}</view>
+    </view>
+    <view class="preview-close" catchtap="onClosePhotoPreview">×</view>
+  </view>
+</view>
+
+</view>

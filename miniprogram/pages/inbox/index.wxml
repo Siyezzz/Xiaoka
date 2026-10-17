@@ -1,0 +1,113 @@
+<view class="page">
+  <!-- 固定导航栏 -->
+  <view class="nav-fixed" style="padding-top: {{navTopPadding}}px">
+    <view class="nav-row">
+      <view class="nav-back" bindtap="onBack" hover-class="back-press" hover-stay-time="80">‹</view>
+      <view class="nav-title">{{isAuthor ? '站内短信（管理）' : '站内短信'}}</view>
+      <view class="nav-back" style="opacity:0">‹</view>
+    </view>
+  </view>
+
+  <view style="height: {{navBarHeightPx}}px"></view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中…</view>
+  </block>
+
+  <block wx:elif="{{!isAuthor}}">
+    <!-- 普通用户视图 -->
+
+    <!-- 发送区 -->
+    <view class="send-card">
+      <view class="send-title">给作者留言</view>
+      <view class="send-hint">只有作者可见，欢迎反馈建议(╹ڡ╹)</view>
+      <textarea
+        class="send-input"
+        placeholder="说说你的想法…"
+        placeholder-class="send-ph"
+        value="{{inputText}}"
+        bindinput="onInput"
+        maxlength="500"
+        auto-height
+        adjust-position
+        cursor-spacing="20"
+      />
+      <view class="send-footer">
+        <text class="char-count">{{inputText.length}}/500</text>
+        <view class="send-btn {{sending ? 'send-btn-dim' : ''}}" bindtap="onSend" hover-class="press-sm" hover-stay-time="80">
+          {{sending ? '发送中…' : '发送'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的留言 -->
+    <view wx:if="{{messages.length > 0}}" class="section">
+      <view class="section-title">我的留言</view>
+      <view class="msg-card" wx:for="{{messages}}" wx:key="_id">
+        <view class="msg-content">{{item.content}}</view>
+        <view class="msg-date">{{item.dateStr}}</view>
+        <view wx:if="{{item.replies.length > 0}}" class="replies">
+          <view class="reply-row" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="index">
+            <view class="reply-avatar">烨</view>
+            <view class="reply-bubble">{{reply.content}}</view>
+          </view>
+        </view>
+        <view wx:else class="no-reply">暂无回复</view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">
+      <view class="empty-icon">✉️</view>
+      <view class="empty-text">还没有留言</view>
+      <view class="empty-hint">有什么想说的，发消息给作者吧！</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- 作者管理视图 -->
+    <view wx:if="{{messages.length === 0}}" class="empty-state">
+      <view class="empty-icon">📭</view>
+      <view class="empty-text">还没有留言</view>
+    </view>
+
+    <view wx:else class="section">
+      <view class="admin-msg-card" wx:for="{{messages}}" wx:key="_id">
+        <view class="admin-msg-header">
+          <view class="admin-sender-av">{{item.senderName ? item.senderName[0] : '?'}}</view>
+          <view class="admin-sender-name">{{item.senderName}}</view>
+          <view class="admin-msg-date">{{item.dateStr}}</view>
+        </view>
+        <view class="admin-msg-content">{{item.content}}</view>
+
+        <view wx:if="{{item.replies.length > 0}}" class="admin-replies">
+          <view class="admin-reply-row" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="index">
+            <text class="admin-reply-prefix">你的回复：</text>
+            <text class="admin-reply-text">{{reply.content}}</text>
+          </view>
+        </view>
+
+        <!-- 回复输入框 -->
+        <view wx:if="{{replyingId === item._id}}" class="reply-input-row">
+          <input
+            class="reply-input"
+            placeholder="输入回复…"
+            placeholder-class="reply-ph"
+            value="{{replyText}}"
+            bindinput="onReplyInput"
+            maxlength="300"
+            adjust-position
+            cursor-spacing="20"
+            focus="{{true}}"
+          />
+          <view class="reply-send {{sendingReply ? 'reply-send-dim' : ''}}" catchtap="onSendReply" data-id="{{item._id}}" hover-class="press-sm" hover-stay-time="80">
+            {{sendingReply ? '…' : '发送'}}
+          </view>
+        </view>
+
+        <view class="reply-toggle-btn" bindtap="onToggleReply" data-id="{{item._id}}" hover-class="press-sm" hover-stay-time="80">
+          {{replyingId === item._id ? '取消' : '回复'}}
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

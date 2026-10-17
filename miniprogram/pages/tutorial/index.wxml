@@ -1,0 +1,496 @@
+<view class="tut-wrap">
+
+  <!-- Progress dots -->
+  <view class="tut-header" style="padding-top: {{statusBarHeight + 14}}px">
+    <view class="step-dots">
+      <view
+        class="step-dot {{i < currentStep ? 'dot-done' : (i === currentStep ? 'dot-cur' : '')}}"
+        wx:for="{{totalSteps}}" wx:key="*this" wx:for-item="i"
+      ></view>
+    </view>
+  </view>
+
+  <swiper
+    class="tut-swiper"
+    current="{{currentStep}}"
+    bindchange="onSwiperChange"
+    duration="320"
+    easing-function="easeInOutCubic"
+  >
+
+    <!-- ===== Step 0: Welcome ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus" style="margin-top: 48rpx">
+          <image class="welcome-img" src="/images/app-icon.png" mode="aspectFit"></image>
+        </view>
+        <view class="tut-text">
+          <view class="tut-tag">欢迎 ✨</view>
+          <view class="tut-title">开启你的元气打卡之旅</view>
+          <view class="tut-desc">每一个好习惯，都从今天的一小步开始。让我们用 1 分钟了解这个小程序吧！</view>
+          <view class="tut-kaomoji">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-full" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">开始 →</view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 1: 今日主页 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus">
+          <view class="mock-screen">
+            <view class="ms-hdr">
+              <view class="ms-date">4月25日 周五</view>
+              <view class="ms-greet">早安，新的一天，元气满满 ☀️</view>
+            </view>
+            <view class="ms-prog-card">
+              <view class="ms-prog-row">
+                <view class="ms-prog-lbl">今日进度</view>
+                <view class="ms-prog-num"><text class="ms-done-n">2</text> / 4</view>
+              </view>
+              <view class="ms-prog-bar"><view class="ms-prog-fill" style="width:50%"></view></view>
+              <view class="ms-prog-tip">已经完成一半啦，加油 💪</view>
+            </view>
+            <view class="ms-sec-lbl">今日打卡</view>
+            <view class="ms-habit-card">
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#45C5A022">🏃</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">晨跑 30 分钟</view><view class="ms-hi-freq">每天</view></view>
+                <view class="ms-hi-done" style="background:#45C5A0">✓</view>
+              </view>
+              <view class="ms-div"></view>
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#FF6B6B22">📖</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">每日阅读</view><view class="ms-hi-freq">每天</view></view>
+                <view class="ms-hi-check"></view>
+              </view>
+              <view class="ms-div"></view>
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#AA96DA22">🧘</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">冥想 10 分钟</view><view class="ms-hi-freq">每天</view></view>
+                <view class="ms-hi-check"></view>
+              </view>
+            </view>
+            <view class="ms-tabbar">
+              <view class="ms-tab ms-tab-on"><view class="ms-tab-dot"></view>今日</view>
+              <view class="ms-tab">习惯</view>
+              <view class="ms-tab">统计</view>
+              <view class="ms-tab">好友</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">打卡主页</view>
+          <view class="tut-desc">今天要完成的习惯全在这里。快去<text class="hl">习惯</text>页面创建你的第一个好习惯吧！</view>
+          <view class="tut-kaomoji">╰ (*°▽°*) ╯</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 2: 创建习惯 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus">
+          <view class="mock-screen">
+            <view class="ms-hdr-preview">
+              <view class="ms-prev-icon">🧘</view>
+              <view class="ms-prev-name">每天冥想</view>
+              <view class="ms-prev-freq">每天打卡</view>
+            </view>
+            <view class="ms-inner-body">
+              <view class="ms-card-sec">
+                <view class="ms-form-lbl">选择图标（可输入任意 Emoji）</view>
+                <view class="ms-emoji-grid">
+                  <text class="ms-ec">🏃</text><text class="ms-ec">📖</text><text class="ms-ec ms-ec-sel">🧘</text><text class="ms-ec">💧</text><text class="ms-ec">🎨</text><text class="ms-ec">🎸</text><text class="ms-ec">🏋</text><text class="ms-ec">🍎</text>
+                  <text class="ms-ec">💪</text><text class="ms-ec">🌟</text><text class="ms-ec">🎯</text><text class="ms-ec">✍</text><text class="ms-ec">🌙</text><text class="ms-ec">🎵</text><text class="ms-ec">🍵</text><text class="ms-ec">🌱</text>
+                </view>
+              </view>
+              <view class="ms-card-sec">
+                <view class="ms-form-lbl">打卡频率</view>
+                <view class="ms-ftabs">
+                  <view class="ms-ftab ms-ftab-on">每天</view>
+                  <view class="ms-ftab">每周</view>
+                  <view class="ms-ftab ms-ftab-free">自由✦</view>
+                </view>
+              </view>
+            </view>
+            <view class="ms-tabbar">
+              <view class="ms-tab">今日</view>
+              <view class="ms-tab ms-tab-on"><view class="ms-tab-dot"></view>习惯</view>
+              <view class="ms-tab">统计</view>
+              <view class="ms-tab">好友</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">定制你的习惯</view>
+          <view class="tut-desc">给习惯起个名字，选择打卡频率：<text class="hl">每天</text>、<text class="hl">每周</text>指定天数，或<text class="hl">自由</text>打卡随时记录。</view>
+          <view class="tut-kaomoji">♪ ( ^ ∇ ^ * )</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 3: 打卡计时 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus">
+          <view class="mock-screen">
+            <view class="ms-hdr-checkin">
+              <view class="ms-ci-icon">🧘</view>
+              <view class="ms-ci-name">每天冥想</view>
+              <view class="ms-ci-sub">每天打卡 · 🔥 连续 5 天</view>
+            </view>
+            <view class="ms-timer-card">
+              <view class="ms-ring-wrap">
+                <view class="ms-ring-track"></view>
+                <view class="ms-ring-arc"></view>
+                <view class="ms-ring-inner">
+                  <view class="ms-time-val">08:42</view>
+                  <view class="ms-time-lbl" style="color:#45C5A0">专注中</view>
+                </view>
+              </view>
+              <view class="ms-presets">
+                <view class="ms-pre">5分</view>
+                <view class="ms-pre ms-pre-on">10分</view>
+                <view class="ms-pre">25分</view>
+                <view class="ms-pre">自定义</view>
+              </view>
+              <view class="ms-ctls">
+                <view class="ms-pause">⏸ 暂停</view>
+                <view class="ms-stop">✕ 取消</view>
+              </view>
+            </view>
+            <view class="ms-detail-card">
+              <view class="ms-photo-add">
+                <view class="ms-photo-ico">📷</view>
+                <view class="ms-photo-txt">拍照记录</view>
+              </view>
+              <view class="ms-note-box">记录今天的感受...</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">计时 + 拍照打卡</view>
+          <view class="tut-desc">选时长开始倒计时，专注完成任务。还可以<text class="hl">📷 拍照</text>留下成长记录，越打越有仪式感！</view>
+          <view class="tut-kaomoji">( ง •̀_•́) ง</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 4 (NEW): 轻触打卡 & 多次打卡 & 提醒 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus" style="margin-top: 30rpx">
+          <view class="mock-screen mock-screen-sm">
+            <view class="ms-hdr">
+              <view class="ms-date">4月25日 周五</view>
+              <view class="ms-greet">今天状态不错💪</view>
+            </view>
+            <view class="ms-prog-card">
+              <view class="ms-prog-row">
+                <view class="ms-prog-lbl">今日进度</view>
+                <view class="ms-prog-num"><text class="ms-done-n">2</text> / 4</view>
+              </view>
+              <view class="ms-prog-bar"><view class="ms-prog-fill" style="width:50%"></view></view>
+              <view class="ms-prog-tip">已经完成一半啦，加油！</view>
+            </view>
+            <view class="ms-sec-lbl">今日打卡</view>
+            <view class="ms-habit-card">
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#45C5A022">🏃</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">晨跑 30 分钟</view><view class="ms-hi-freq">每天</view></view>
+                <view class="ms-hi-done" style="background:#45C5A0">✓</view>
+              </view>
+              <view class="ms-div"></view>
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#4A90E222">💧</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">喝水 8 杯</view><view class="ms-hi-freq">自由打卡</view></view>
+                <view class="ms-hi-done ms-hi-count" style="background:#45C5A0">3</view>
+              </view>
+              <view class="ms-div"></view>
+              <view class="ms-hi-row">
+                <view class="ms-hi-icon" style="background:#AA96DA22">📖</view>
+                <view class="ms-hi-body"><view class="ms-hi-name">每日阅读</view><view class="ms-hi-freq">每天</view></view>
+                <view class="ms-hi-check"></view>
+              </view>
+            </view>
+            <view class="ms-tabbar">
+              <view class="ms-tab ms-tab-on"><view class="ms-tab-dot"></view>今日</view>
+              <view class="ms-tab">习惯</view>
+              <view class="ms-tab">统计</view>
+              <view class="ms-tab">好友</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">轻触打卡，时刻同行</view>
+          <view class="tut-desc">点击右侧<text class="hl">圆点</text>，免计时快速打卡，多次点击还能<text class="hl">累积次数</text>。将消息提醒设为<text class="hl">永久允许</text>，每日准时收到提醒，轻松开启健康作息~</view>
+          <view class="tut-kaomoji">(￣︶￣)↗[GO!]</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 5: 统计 (redesigned to match actual UI) ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus" style="margin-top: 40rpx">
+          <view class="mock-screen">
+            <!-- Habit selector tabs -->
+            <view class="ms-htabs">
+              <view class="ms-htab ms-htab-on">🧘 冥想</view>
+              <view class="ms-htab">🏃 晨跑</view>
+              <view class="ms-htab">📖 阅读</view>
+            </view>
+            <!-- 3-cell stat row -->
+            <view class="ms-stat-row">
+              <view class="ms-stat-cell">
+                <view class="ms-stat-val" style="color:#45C5A0">15</view>
+                <view class="ms-stat-lbl">🏆 最长连续</view>
+              </view>
+              <view class="ms-stat-divider"></view>
+              <view class="ms-stat-cell">
+                <view class="ms-stat-val" style="color:#45C5A0">12</view>
+                <view class="ms-stat-lbl">🔥 当前连续</view>
+              </view>
+              <view class="ms-stat-divider"></view>
+              <view class="ms-stat-cell">
+                <view class="ms-stat-val" style="color:#45C5A0">47</view>
+                <view class="ms-stat-lbl">✅ 总打卡次</view>
+              </view>
+            </view>
+            <!-- Badge section -->
+            <view class="ms-badge-sec">
+              <view class="ms-badge-ico">🏅</view>
+              <view class="ms-badge-body">
+                <view class="ms-badge-name">周常达人</view>
+                <view class="ms-badge-sub">连续7天打卡</view>
+              </view>
+              <view class="ms-badge-count-btn">已解锁 3 个 ›</view>
+            </view>
+            <!-- Weekly chart -->
+            <view class="ms-week-hdr">
+              <view class="ms-week-title">近 7 天打卡时长</view>
+              <view class="ms-week-toggle">每日 ›</view>
+            </view>
+            <view class="ms-bchart">
+              <view class="ms-bcol"><view class="ms-bbar" style="height:45%"></view><view class="ms-blbl">一</view></view>
+              <view class="ms-bcol"><view class="ms-bbar" style="height:60%"></view><view class="ms-blbl">二</view></view>
+              <view class="ms-bcol"><view class="ms-bbar" style="height:38%"></view><view class="ms-blbl">三</view></view>
+              <view class="ms-bcol"><view class="ms-bbar" style="height:80%"></view><view class="ms-blbl">四</view></view>
+              <view class="ms-bcol"><view class="ms-bbar ms-bbar-on" style="height:100%"></view><view class="ms-blbl ms-blbl-on">五</view></view>
+              <view class="ms-bcol"><view class="ms-blbl">六</view></view>
+              <view class="ms-bcol"><view class="ms-blbl">日</view></view>
+            </view>
+            <view class="ms-tabbar">
+              <view class="ms-tab">今日</view>
+              <view class="ms-tab">习惯</view>
+              <view class="ms-tab ms-tab-on"><view class="ms-tab-dot"></view>统计</view>
+              <view class="ms-tab">好友</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">成长可视化</view>
+          <view class="tut-desc">统计页面展示<text class="hl">连续天数、成就徽章</text>和每周趋势。下方日历还可以查看历史打卡记录哟 ~</view>
+          <view class="tut-kaomoji">( •̀ ω •́ )✧</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 5: 好友 (redesigned to match actual UI) ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus" style="margin-top: 40rpx">
+          <view class="mock-screen">
+            <!-- 我分享的习惯 -->
+            <view class="ms-sec-row">
+              <view class="ms-sec-title">我分享的习惯 (2)</view>
+              <view class="ms-sec-mgr">管理</view>
+            </view>
+            <view class="ms-shared-list">
+              <view class="ms-shared-item">
+                <view class="ms-sh-icon" style="background:#FF6B6B22">✍</view>
+                <view class="ms-sh-body">
+                  <view class="ms-sh-name">练字</view>
+                  <view class="ms-sh-sub">等待好友加入</view>
+                </view>
+                <view class="ms-sh-edit">编辑</view>
+              </view>
+              <view class="ms-shared-item">
+                <view class="ms-sh-icon" style="background:#45C5A022">🏃</view>
+                <view class="ms-sh-body">
+                  <view class="ms-sh-name">健身</view>
+                  <view class="ms-sh-sub">等待好友加入</view>
+                </view>
+                <view class="ms-sh-edit">编辑</view>
+              </view>
+            </view>
+            <!-- 打卡好伙伴 -->
+            <view class="ms-sec-row">
+              <view class="ms-sec-title">打卡好伙伴 (0)</view>
+              <view class="ms-sec-mgr">管理</view>
+            </view>
+            <view class="ms-friend-empty">
+              <view class="ms-fe-icons"> 🌏 </view>
+              <view class="ms-fe-title">这里还很安静</view>
+              <view class="ms-fe-sub">邀请好友，一起打卡</view>
+            </view>
+            <view class="ms-share-btn">分享给好友</view>
+            <view class="ms-tabbar">
+              <view class="ms-tab">今日</view>
+              <view class="ms-tab">习惯</view>
+              <view class="ms-tab">统计</view>
+              <view class="ms-tab ms-tab-on"><view class="ms-tab-dot"></view>好友</view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">互相监督，共同进步</view>
+          <view class="tut-desc">邀请好友加入，查看彼此的打卡动态和习惯目标。见证彼此的努力，更容易坚持！</view>
+          <view class="tut-kaomoji">( *^-^)ρ(^0^* )</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 7: 趣味互动 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus" style="margin-top: 12rpx">
+          <view class="mock-screen">
+            <!-- 好友页头部（居中布局） -->
+            <view class="ms-fi-hdr">
+              <view class="ms-fi-av" style="background:#56A3E8">李</view>
+              <view class="ms-fi-name">小李</view>
+              <view class="ms-fi-prog">今日完成 2 / 3</view>
+            </view>
+            <!-- 习惯卡片 -->
+            <view class="ms-fi-habit">
+              <view class="ms-sh-icon" style="background:#FF6B6B22">📖</view>
+              <view class="ms-hi-body">
+                <view class="ms-hi-name">每天阅读</view>
+                <view class="ms-hi-freq" style="color:#45C5A0">已打卡 ✓</view>
+              </view>
+              <view class="ms-fi-streak" style="color:#45C5A0;background:#45C5A018">12天</view>
+              <view class="ms-fi-bell">🔔</view>
+            </view>
+            <view class="ms-fi-habit">
+              <view class="ms-sh-icon" style="background:#AA96DA22">🏃</view>
+              <view class="ms-hi-body">
+                <view class="ms-hi-name">晨跑</view>
+                <view class="ms-hi-freq">每天</view>
+              </view>
+              <view class="ms-fi-streak" style="color:#AAA;background:#F5F5F5">5天</view>
+              <view class="ms-fi-bell">🔔</view>
+            </view>
+            <!-- 点赞 / 留言按钮 -->
+            <view class="ms-fi-actions">
+              <view class="ms-fi-like-btn ms-fi-liked">❤️ 已点赞</view>
+              <view class="ms-fi-cmt-btn">💬 留言</view>
+            </view>
+            <!-- 互动记录 -->
+            <view class="ms-fi-conv">
+              <view class="ms-fi-convrow">
+                <view class="ms-fi-conv-av" style="background:#56A3E8">李</view>
+                <view class="ms-fi-bubble ms-fi-bubble-theirs">加油鸭！一起打卡～</view>
+              </view>
+              <view class="ms-fi-convrow ms-fi-convrow-mine">
+                <view class="ms-fi-bubble ms-fi-bubble-mine">谢谢❤️ 继续冲！</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-title">趣味互动</view>
+          <view class="tut-desc">通过<text class="hl">点赞</text>和<text class="hl">评论</text>表达对好友坚持的认可吧！还可以通过<text class="hl">摇铃</text>提醒对方打卡～（珍惜好友位哦）</view>
+          <view class="tut-kaomoji">(～￣▽￣)～</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">下一页 →</view>
+          </view>
+          <view class="foot-skip" bindtap="onSkip" hover-class="foot-skip-press" hover-stay-time="80">暂时跳过，随时可查看</view>
+        </view>
+      </view>
+    </swiper-item>
+
+    <!-- ===== Step 8: 出发 ===== -->
+    <swiper-item>
+      <view class="tut-slide">
+        <view class="illus illus-finish">
+          <view class="finish-stars">
+            <text class="fstar fs1">⭐</text>
+            <text class="fstar fs2">✨</text>
+            <text class="fstar fs3">🌟</text>
+            <text class="fstar fs4">✨</text>
+            <text class="fstar fs5">⭐</text>
+          </view>
+          <view class="finish-ring"><text class="finish-ck">✓</text></view>
+          <view class="finish-sub">
+            <text class="fstar fs6">🎊</text>
+            <text class="fstar fs6">🎉</text>
+          </view>
+        </view>
+        <view class="tut-text">
+          <view class="tut-tag">出发吧 🚀</view>
+          <view class="tut-title">每天都要元气打卡！</view>
+          <view class="tut-desc">一切准备就绪！快去创建你的第一个习惯，让每一天都充满成就感吧！</view>
+          <view class="tut-kaomoji">ヽ(✿ﾟ▽ﾟ)ノ</view>
+        </view>
+        <view class="slide-nav">
+          <view class="foot-row">
+            <view class="foot-prev" bindtap="onPrev" hover-class="foot-prev-press" hover-stay-time="80">← 上一页</view>
+            <view class="foot-next foot-finish" bindtap="onNext" hover-class="foot-press" hover-stay-time="100">开始打卡 💫</view>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+
+  </swiper>
+
+</view>

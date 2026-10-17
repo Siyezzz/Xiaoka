@@ -1,0 +1,9 @@
+{
+  "name": "reminders",
+  "version": "1.0.0",
+  "description": "习惯打卡提醒",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

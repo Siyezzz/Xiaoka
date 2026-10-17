@@ -1,0 +1,321 @@
+<view class="page">
+  <view class="page-header">
+    <view style="height: {{statusBarHeight}}px"></view>
+    <view class="header-title">数据统计</view>
+    <view class="header-sub">{{habits.length}} 个习惯</view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-wrap"><view class="loading-text">加载中...</view></view>
+  </block>
+
+  <block wx:elif="{{habits.length === 0}}">
+    <view class="empty-state">
+      <view class="empty-icon">🌱</view>
+      <view class="empty-text">还没有习惯数据</view>
+      <view class="empty-sub">先去添加习惯并打卡吧</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- 习惯选择器：仅显示未删除的习惯 -->
+    <scroll-view class="habit-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="habit-tabs">
+        <view
+          class="habit-tab {{selectedHabitId === item._id ? 'tab-active' : ''}}"
+          style="background: {{item.color + (selectedHabitId === item._id ? '' : '0C')}}; color: {{selectedHabitId === item._id ? '#fff' : item.color}}; {{selectedHabitId === item._id ? 'box-shadow: 0 4rpx 16rpx ' + item.color + '44, 0 1rpx 0 rgba(255,255,255,0.28) inset;' : ''}}"
+          wx:for="{{activeHabits}}"
+          wx:key="_id"
+          bindtap="onSelectHabit"
+          data-id="{{item._id}}"
+          hover-class="press-sm"
+          hover-stay-time="60"
+        >
+          <text>{{item.icon}} {{item.name}}</text>
+        </view>
+        <!-- 已删除折叠按钮 -->
+        <view
+          wx:if="{{deletedHabits.length > 0}}"
+          class="habit-tab tab-folder {{deletedExpanded ? 'tab-folder-open' : ''}}"
+          bindtap="onToggleDeletedFolder"
+          hover-class="press-sm"
+          hover-stay-time="60"
+        >
+          <text class="folder-label">已删除</text>
+          <text class="folder-badge">{{deletedHabits.length}}</text>
+          <text class="folder-arrow">{{deletedExpanded ? '▲' : '▼'}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 已删除习惯展开行 -->
+    <view class="deleted-row" wx:if="{{deletedExpanded && deletedHabits.length > 0}}">
+      <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="deleted-scroll">
+        <view class="habit-tabs deleted-tabs">
+          <view
+            class="habit-tab tab-deleted {{selectedHabitId === item._id ? 'tab-active' : ''}}"
+            style="{{selectedHabitId === item._id ? 'background:' + item.color + '; border-color:' + item.color : ''}}"
+            wx:for="{{deletedHabits}}"
+            wx:key="_id"
+            bindtap="onSelectHabit"
+            data-id="{{item._id}}"
+            hover-class="press-sm"
+            hover-stay-time="60"
+          >
+            <text>{{item.icon}} {{item.name}}</text>
+            <view
+              class="tab-recover-btn"
+              catchtap="onRecoverHabit"
+              data-id="{{item._id}}"
+              data-name="{{item.name}}"
+              hover-class="press-sm"
+              hover-stay-time="60"
+            >↩</view>
+            <view
+              class="tab-del-btn"
+              catchtap="onHardDeleteHabit"
+              data-id="{{item._id}}"
+              data-name="{{item.name}}"
+              hover-class="press-sm"
+              hover-stay-time="60"
+            >×</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="stats-body {{statsLoading ? 'stats-body-loading' : ''}}">
+    <!-- 核心数据 -->
+    <view class="stats-row">
+      <view class="stat-cell">
+        <view class="stat-value" style="color:{{selectedHabit.color}}">{{bestStreak}}</view>
+        <view class="stat-label">🏆 最长连续</view>
+      </view>
+      <view class="stat-divider" style="background: {{selectedHabit.color}}60"></view>
+      <view class="stat-cell">
+        <view class="stat-value" style="color:{{selectedHabit.color}}">{{streak}}</view>
+        <view class="stat-label">🔥 当前连续</view>
+      </view>
+      <view class="stat-divider" style="background: {{selectedHabit.color}}60"></view>
+      <view class="stat-cell">
+        <view class="stat-value" style="color:{{selectedHabit.color}}">{{totalCheckins}}</view>
+        <view class="stat-label">✅ 总打卡次</view>
+      </view>
+    </view>
+
+    <!-- 成就徽章 -->
+    <view class="card badge-section" wx:if="{{earnedBadgeCount > 0}}" bindtap="onOpenBadgePicker">
+      <view class="badge-row">
+        <view class="badge-ico-wrap">
+          <text class="badge-ico">{{displayBadge.icon}}</text>
+        </view>
+        <view class="badge-body">
+          <view class="badge-name">{{displayBadge.name}}</view>
+          <view class="badge-desc">{{displayBadge.desc}}</view>
+        </view>
+        <view class="badge-count-btn" catchtap="onOpenBadgePicker" hover-class="press-sm" hover-stay-time="80">已解锁 {{earnedBadgeCount}} 个 ›</view>
+      </view>
+    </view>
+    <view class="card badge-section badge-section-empty" wx:else>
+      <view class="badge-row">
+        <view class="badge-ico-wrap badge-ico-empty">
+          <text class="badge-ico">🎖</text>
+        </view>
+        <view class="badge-body">
+          <view class="badge-name badge-name-empty">打卡解锁成就</view>
+          <view class="badge-desc">坚持打卡，解锁专属徽章</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 近7天打卡时长 -->
+    <view class="card card-dur" bindtap="onToggleWeeklyView" hover-class="card-press" hover-stay-time="80">
+      <!-- 背景斜排图标 -->
+      <view class="dur-bg-grid">
+        <view class="dur-bg-row dur-bg-row-a">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+        <view class="dur-bg-row dur-bg-row-b">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+        <view class="dur-bg-row dur-bg-row-a">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+        <view class="dur-bg-row dur-bg-row-b">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+        <view class="dur-bg-row dur-bg-row-a">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+        <view class="dur-bg-row dur-bg-row-b">
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+          <text class="dur-bg-ico">{{selectedHabit.icon}}</text>
+        </view>
+      </view>
+
+      <view class="weekly-header">
+        <text class="weekly-title">近 7 天打卡时长</text>
+        <text class="weekly-toggle {{weeklyViewToggling ? 'toggle-bounce' : ''}}">{{weeklyView === 'total' ? '每日 ›' : '汇总 ›'}}</text>
+      </view>
+
+      <!-- 双视图容器（固定高度，absolute切换避免格子大小变化） -->
+      <view class="weekly-content">
+        <!-- 总时长 -->
+        <view class="weekly-view-panel {{weeklyView !== 'total' ? 'weekly-panel-hidden' : ''}}">
+          <view class="weekly-total-row">
+            <text class="weekly-num" style="color:{{selectedHabit.color}}">{{weeklyTotalDuration}}</text>
+            <text class="weekly-unit">分钟</text>
+            <text class="weekly-achieve" wx:if="{{weeklyAchievement}}">{{weeklyAchievement}}</text>
+          </view>
+          <text class="weekly-sub">近7天累计打卡时长</text>
+        </view>
+
+        <!-- 每日时长 -->
+        <view class="weekly-view-panel {{weeklyView === 'total' ? 'weekly-panel-hidden' : ''}}">
+          <view class="bar-chart dur-chart">
+            <view class="bar-item" wx:for="{{weeklyDailyDurations}}" wx:key="label">
+              <text class="dur-top-label">{{item.duration > 0 ? item.duration + '′' : ''}}</text>
+              <view class="bar-wrap">
+                <view
+                  class="bar"
+                  wx:if="{{item.duration > 0}}"
+                  style="{{item.barStyle}}"
+                ></view>
+              </view>
+              <view class="bar-label {{item.isToday ? 'label-today' : ''}}">{{item.label}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 多习惯打卡日历 -->
+    <view class="card cal-card">
+
+      <!-- 月份导航 -->
+      <view class="cal-nav-row">
+        <view class="cal-nav-btn" bindtap="onPrevMonth" hover-class="press-sm" hover-stay-time="80">‹</view>
+        <view class="cal-month-label">{{calendarMonthStr}}</view>
+        <view class="cal-nav-btn {{calendarNextDisabled ? 'nav-btn-disabled' : ''}}" bindtap="onNextMonth" hover-class="press-sm" hover-stay-time="80">›</view>
+      </view>
+
+      <!-- 习惯图例 -->
+      <view class="cal-legend-row" wx:if="{{habits.length > 0}}">
+        <view class="legend-habit" wx:for="{{habits}}" wx:key="_id">
+          <view class="legend-habit-dot" style="background:{{item.color}}"></view>
+          <text class="legend-habit-name">{{item.name}}</text>
+        </view>
+      </view>
+
+      <!-- 周标题 -->
+      <view class="cal-week-row">
+        <text wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this" class="cal-week-label">{{item}}</text>
+      </view>
+
+      <!-- 日历格 -->
+      <view class="calendar-grid">
+        <view
+          class="cal-cell {{item.isToday ? 'cell-today' : ''}} {{item.isPadding ? 'cell-padding' : ''}} {{item.isFuture ? 'cell-future' : ''}} {{!item.isPadding && !item.isFuture ? 'cell-tappable' : ''}}"
+          wx:for="{{calendarDays}}"
+          wx:key="_key"
+          bindtap="{{!item.isPadding && !item.isFuture ? 'onDayTap' : ''}}"
+          hover-class="{{!item.isPadding && !item.isFuture ? 'cell-press' : ''}}"
+          hover-stay-time="120"
+          data-date="{{item.date}}"
+        >
+          <text class="cal-day {{item.isToday ? 'day-today' : ''}}">{{item.day}}</text>
+          <view class="cal-dots" wx:if="{{!item.isPadding && !item.isFuture}}">
+            <view
+              class="cal-dot"
+              wx:for="{{item.dots}}"
+              wx:key="color"
+              wx:for-item="dot"
+              style="background:{{dot.color}}"
+            ></view>
+            <text class="cal-extra" wx:if="{{item.extra > 0}}">+{{item.extra}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    </view>
+  </block>
+
+  <!-- 徽章选择器 -->
+  <view class="badge-picker-mask" wx:if="{{showBadgePicker}}" bindtap="onCloseBadgePicker" catchtouchmove="noop">
+    <view class="badge-picker-sheet" catchtap="">
+      <view class="badge-picker-hdr">
+        <view class="badge-picker-title">选择展示的徽章</view>
+        <view class="badge-picker-close" bindtap="onCloseBadgePicker" hover-class="press-sm" hover-stay-time="80">✕</view>
+      </view>
+      <scroll-view scroll-y enhanced class="badge-picker-list">
+        <view
+          class="badge-picker-item {{displayBadgeIndex === index ? 'bp-item-sel' : ''}}"
+          wx:for="{{habitBadges}}"
+          wx:key="id"
+          bindtap="onSelectDisplayBadge"
+          data-index="{{index}}"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >
+          <text class="bp-item-ico">{{item.icon}}</text>
+          <view class="bp-item-body">
+            <view class="bp-item-name">{{item.name}}</view>
+            <view class="bp-item-desc">{{item.desc}}</view>
+          </view>
+          <view class="bp-item-check" wx:if="{{displayBadgeIndex === index}}">✓</view>
+        </view>
+        <view style="height: 80rpx"></view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 日期详情弹窗 -->
+  <view class="day-mask" wx:if="{{selectedDay}}" bindtap="onCloseDayDetail" catchtouchmove="noop">
+    <view class="day-sheet" catchtap="">
+      <view class="day-sheet-header">
+        <text class="day-sheet-title">{{selectedDayLabel}}</text>
+        <view class="day-sheet-close" bindtap="onCloseDayDetail" hover-class="press-sm" hover-stay-time="80">✕</view>
+      </view>
+      <scroll-view scroll-y enhanced class="day-sheet-list" style="height:{{sheetListHeight}}px">
+        <view class="day-sheet-item" wx:for="{{dayDetails}}" wx:key="_id">
+          <view class="day-item-icon-wrap" style="background: {{item.color}}22">
+            <text class="day-item-icon">{{item.icon}}</text>
+          </view>
+          <view class="day-item-info">
+            <text class="day-item-name {{item.done ? '' : 'day-item-miss'}}">{{item.name}}</text>
+            <text class="day-item-meta" wx:if="{{item.done && item.duration}}">⏱ {{item.duration}}分钟</text>
+            <text class="day-item-note" wx:if="{{item.done && item.note}}">📝 {{item.note}}</text>
+            <text class="day-item-meta day-item-miss" wx:if="{{!item.done}}">未打卡</text>
+          </view>
+          <view class="day-item-badge {{item.done ? 'badge-done' : 'badge-miss'}}">
+            {{item.done ? '✓' : '—'}}
+          </view>
+        </view>
+        <view style="height: 60rpx"></view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

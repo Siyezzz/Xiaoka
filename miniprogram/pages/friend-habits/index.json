@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "好友打卡",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F7F8FC",
+  "usingComponents": {}
+}

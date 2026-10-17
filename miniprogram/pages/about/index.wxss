@@ -1,0 +1,132 @@
+.page {
+  min-height: 100vh;
+  background: #EBF8F2;
+  padding-bottom: 80rpx;
+}
+
+.nav-fixed {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 45%),
+    linear-gradient(150deg, #3AC99E 0%, #22B085 60%, #189D74 100%);
+  border-radius: 0 0 40rpx 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(34,176,133,0.18);
+}
+
+.nav-row {
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+}
+
+.nav-back {
+  font-size: 52rpx;
+  color: #fff;
+  font-weight: 300;
+  width: 60rpx;
+  text-align: left;
+  line-height: 1;
+}
+
+.nav-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.card {
+  margin: 0 32rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.05);
+}
+
+.mt16 { margin-top: 16rpx; }
+.mt24 { margin-top: 24rpx; }
+
+.card-sep {
+  height: 1rpx;
+  background: #F2F2F2;
+  margin: 0 28rpx;
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 32rpx;
+}
+
+.card-label {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.card-value {
+  font-size: 28rpx;
+  color: #888;
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.hint-gray  { font-size: 26rpx; color: #BBB; }
+.hint-green { font-size: 26rpx; color: #3AC99E; font-weight: 600; }
+.hint-orange { font-size: 26rpx; color: #FF8C00; font-weight: 600; }
+
+.update-btn {
+  background: #FF8C00;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+  border-radius: 30rpx;
+  padding: 8rpx 24rpx;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 38rpx 32rpx;
+  transition: opacity 0.15s, transform 0.15s;
+  will-change: transform, opacity;
+}
+
+.nav-item-press { opacity: 0.62; transform: scale(0.97); }
+
+.nav-item-label {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.inbox-reply-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #FF3B30;
+  flex-shrink: 0;
+}
+
+.nav-arrow {
+  font-size: 40rpx;
+  color: #CCC;
+  font-weight: 300;
+  line-height: 1;
+}

@@ -1,0 +1,676 @@
+/* ===== Page ===== */
+page { height: 100%; }
+
+.tut-wrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+/* ===== Header ===== */
+.tut-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40rpx 16rpx;
+  flex-shrink: 0;
+}
+
+.step-dots { display: flex; align-items: center; gap: 20rpx; }
+
+.step-dot {
+  width: 10rpx; height: 10rpx; border-radius: 5rpx;
+  background: #EBEBEB;
+  transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.35s;
+}
+.dot-cur  { width: 28rpx; background: #45C5A0; }
+.dot-done { background: #45C5A066; }
+
+.step-num { font-size: 24rpx; color: #CCCCCC; font-weight: 500; }
+
+/* ===== Swiper ===== */
+.tut-swiper { flex: 1; min-height: 0; }
+
+.tut-slide {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60rpx 40rpx 100rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Equal spacers to vertically center the content+button group */
+.s-space    { flex: 1; }
+.s-space-sm { flex: 0.55; min-height: 16rpx; }
+
+/* ===== Illustration area ===== */
+.illus {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Text content ===== */
+.tut-text {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+/* ===== Slide navigation (inside each slide) ===== */
+.slide-nav {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  min-height: 148rpx;
+}
+
+.tut-tag {
+  display: inline-block;
+  background: #45C5A014;
+  color: #45C5A0;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 8rpx 22rpx;
+  border-radius: 20rpx;
+  margin-bottom: 14rpx;
+}
+
+.tut-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 30rpx;
+  line-height: 1.25;
+}
+
+.tut-desc {
+  font-size: 32rpx;
+  color: #666;
+  line-height: 2.0;
+  letter-spacing: 0.8rpx;
+  word-spacing: 2rpx;
+}
+
+.tut-kaomoji {
+  font-size: 28rpx;
+  color: #45C5A0;
+  margin-top: 30rpx;
+  font-weight: 500;
+}
+
+.hl { color: #45C5A0; font-weight: 700; }
+
+.foot-row { display: flex; gap: 16rpx; }
+
+.foot-prev {
+  flex: 1; height: 96rpx; border-radius: 48rpx;
+  background: rgba(69,197,160,0.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: 700; color: #45C5A0; letter-spacing: 1rpx;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.foot-prev-press { opacity: 0.6; transform: scale(0.97); }
+
+.foot-next {
+  flex: 2; height: 96rpx; border-radius: 48rpx;
+  background: linear-gradient(135deg, #52CDA8, #2EBB92);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: 700; color: #fff; letter-spacing: 1rpx;
+  box-shadow: 0 1rpx 0 rgba(0,0,0,0.08), 0 8rpx 24rpx rgba(69,197,160,0.36), inset 0 1rpx 0 rgba(255,255,255,0.22);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.foot-full {
+  height: 96rpx; border-radius: 48rpx;
+  background: linear-gradient(135deg, #52CDA8, #2EBB92);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32rpx; font-weight: 700; color: #fff; letter-spacing: 2rpx;
+  box-shadow: 0 1rpx 0 rgba(0,0,0,0.08), 0 8rpx 24rpx rgba(69,197,160,0.36), inset 0 1rpx 0 rgba(255,255,255,0.22);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.foot-finish {
+  background: linear-gradient(135deg, #FFB347, #FF7F50);
+  box-shadow: 0 1rpx 0 rgba(0,0,0,0.08), 0 8rpx 24rpx rgba(255,127,80,0.36), inset 0 1rpx 0 rgba(255,255,255,0.22);
+}
+
+.foot-press      { opacity: 0.78; transform: scale(0.97); }
+.foot-skip       { text-align: center; font-size: 24rpx; color: #C8C8C8; padding: 2rpx 0; }
+.foot-skip-press { opacity: 0.5; }
+
+/* ============================================================
+   WELCOME — large static app icon, no animation
+   ============================================================ */
+.welcome-img {
+  width: 600rpx;
+  height: 600rpx;
+}
+
+/* ============================================================
+   MOCK SCREEN — 560rpx wide, uniform min-height
+   ============================================================ */
+.mock-screen {
+  width: 560rpx;
+  min-height: 580rpx;
+  background: #F7F8FC;
+  border-radius: 30rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 1rpx 0 rgba(0,0,0,0.06),
+    0 10rpx 40rpx rgba(0,0,0,0.16);
+  border: 1rpx solid rgba(0,0,0,0.05);
+}
+
+/* --- Green header --- */
+.ms-hdr {
+  background: linear-gradient(150deg, #4ECBA8, #2EBB92);
+  padding: 28rpx 36rpx 42rpx;
+}
+.ms-date  { font-size: 40rpx; font-weight: 700; color: #fff; }
+.ms-greet { font-size: 27rpx; color: rgba(255,255,255,0.82); margin-top: 6rpx; }
+
+/* --- Progress card (overlaps header) --- */
+.ms-prog-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 20rpx 25rpx;
+  margin: -25rpx 17rpx 0;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.07);
+}
+.ms-prog-row  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13rpx; }
+.ms-prog-lbl  { font-size: 24rpx; color: #888; }
+.ms-prog-num  { font-size: 24rpx; color: #AAA; }
+.ms-done-n    { font-size: 34rpx; font-weight: 700; color: #45C5A0; }
+.ms-prog-bar  { height: 10rpx; background: #F0F0F0; border-radius: 6rpx; overflow: hidden; margin-bottom: 13rpx; }
+.ms-prog-fill { height: 100%; background: linear-gradient(90deg, #45C5A0, #6DD5C0); border-radius: 6rpx; }
+.ms-prog-tip  { font-size: 21rpx; color: #AAA; }
+
+/* --- Section label --- */
+.ms-sec-lbl { font-size: 24rpx; font-weight: 700; color: #333; padding: 18rpx 25rpx 11rpx; }
+
+/* --- Habit card --- */
+.ms-habit-card {
+  background: #fff; border-radius: 20rpx;
+  padding: 0 20rpx; margin: 0 17rpx 11rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-hi-row  { display: flex; align-items: center; gap: 17rpx; padding: 18rpx 0; }
+.ms-hi-icon {
+  width: 53rpx; height: 53rpx; border-radius: 13rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30rpx; flex-shrink: 0;
+}
+.ms-hi-body { flex: 1; }
+.ms-hi-name { font-size: 25rpx; font-weight: 600; color: #333; }
+.ms-hi-freq { font-size: 20rpx; color: #45C5A0; }
+.ms-hi-check {
+  width: 42rpx; height: 42rpx; border-radius: 50%;
+  border: 2rpx solid #E0E0E0; flex-shrink: 0;
+}
+.ms-hi-done {
+  width: 42rpx; height: 42rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22rpx; color: #fff; font-weight: 700; flex-shrink: 0;
+}
+
+/* --- Tab bar --- */
+.ms-tabbar {
+  display: flex; background: #fff;
+  border-top: 1rpx solid #F0F0F0;
+  padding: 15rpx 0 18rpx; margin-top: auto;
+}
+.ms-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5rpx;
+  font-size: 27rpx; color: #BBBBBB; font-weight: 500;
+}
+.ms-tab-on {
+  color: #45C5A0; font-weight: 700;
+  background: rgba(69,197,160,0.12);
+  border-radius: 22rpx;
+  padding: 4rpx 12rpx;
+  margin: -4rpx 0;
+}
+.ms-tab-dot { width: 8rpx; height: 8rpx; border-radius: 50%; background: #45C5A0; }
+
+/* --- Divider --- */
+.ms-div { height: 1rpx; background: #F5F5F5; }
+
+/* ============================================================
+   STEP 2 — Add habit
+   ============================================================ */
+.ms-hdr-preview {
+  background: linear-gradient(160deg, #45C5A0, #6DD5C0);
+  padding: 25rpx 36rpx 31rpx;
+  display: flex; flex-direction: column; align-items: center;
+}
+.ms-prev-icon {
+  width: 90rpx; height: 90rpx; border-radius: 24rpx;
+  background: rgba(255,255,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48rpx; margin-bottom: 13rpx;
+}
+.ms-prev-name { font-size: 32rpx; font-weight: 700; color: #fff; }
+.ms-prev-freq { font-size: 22rpx; color: rgba(255,255,255,0.8); margin-top: 4rpx; }
+
+.ms-inner-body { padding: 0 17rpx; flex: 1; }
+
+.ms-card-sec {
+  background: #fff; border-radius: 20rpx;
+  padding: 18rpx; margin: 14rpx 0;
+}
+.ms-form-lbl { font-size: 21rpx; color: #AAA; font-weight: 600; margin-bottom: 15rpx; }
+
+.ms-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10rpx;
+}
+.ms-ec {
+  aspect-ratio: 1; border-radius: 8rpx;
+  background: #F7F8FC;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 27rpx; border: 1.5rpx solid transparent;
+}
+.ms-ec-sel {
+  background: rgba(69,197,160,0.12);
+  border-color: #45C5A0;
+  transform: scale(1.12);
+}
+
+.ms-ftabs { display: flex; gap: 11rpx; }
+.ms-ftab {
+  flex: 1; height: 62rpx;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 14rpx; background: #F7F8FC;
+  font-size: 24rpx; color: #888;
+}
+.ms-ftab-on   { background: #45C5A0; color: #fff; font-weight: 700; }
+.ms-ftab-free { color: #45C5A0; font-weight: 600; }
+
+/* ============================================================
+   STEP 3 — Checkin page
+   ============================================================ */
+.ms-hdr-checkin {
+  background: linear-gradient(180deg, #45C5A0, #45C5A0BB);
+  padding: 21rpx 36rpx 31rpx;
+  display: flex; flex-direction: column; align-items: center;
+  border-radius: 0 0 28rpx 28rpx;
+}
+.ms-ci-icon {
+  width: 78rpx; height: 78rpx; border-radius: 20rpx;
+  background: rgba(255,255,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 39rpx; margin-bottom: 10rpx;
+}
+.ms-ci-name { font-size: 31rpx; font-weight: 700; color: #fff; }
+.ms-ci-sub  { font-size: 22rpx; color: rgba(255,255,255,0.8); margin-top: 4rpx; }
+
+.ms-timer-card {
+  background: #fff; border-radius: 25rpx;
+  padding: 20rpx 25rpx 17rpx;
+  margin: -14rpx 17rpx 14rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; align-items: center; gap: 17rpx;
+}
+
+.ms-ring-wrap { position: relative; width: 190rpx; height: 190rpx; }
+.ms-ring-track { position: absolute; inset: 0; border-radius: 50%; border: 13rpx solid #F0F0F0; }
+.ms-ring-arc   { position: absolute; inset: 0; border-radius: 50%; border: 13rpx solid #45C5A0; }
+.ms-ring-inner {
+  position: absolute; inset: 21rpx; border-radius: 50%; background: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rpx;
+}
+.ms-time-val { font-size: 45rpx; font-weight: 700; color: #45C5A0; letter-spacing: 1rpx; }
+.ms-time-lbl { font-size: 20rpx; }
+
+.ms-presets { display: flex; gap: 11rpx; }
+.ms-pre {
+  padding: 10rpx 18rpx; border-radius: 28rpx;
+  border: 1rpx solid rgba(0,0,0,0.08);
+  font-size: 22rpx; color: #888; background: #fff;
+}
+.ms-pre-on { background: #45C5A0; border-color: #45C5A0; color: #fff; font-weight: 700; }
+
+.ms-ctls { display: flex; gap: 14rpx; }
+.ms-pause { padding: 13rpx 25rpx; border-radius: 34rpx; background: #F0F9FF; color: #2D9CDB; font-size: 22rpx; font-weight: 600; }
+.ms-stop  { padding: 13rpx 25rpx; border-radius: 34rpx; background: #FFF0F0; color: #EB5757; font-size: 22rpx; font-weight: 600; }
+
+.ms-detail-card {
+  background: #fff; border-radius: 20rpx;
+  padding: 17rpx 20rpx; margin: 0 17rpx 14rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-photo-add {
+  display: flex; align-items: center; gap: 14rpx;
+  background: #F7F8FC; border-radius: 15rpx;
+  padding: 15rpx 20rpx; margin-bottom: 13rpx;
+}
+.ms-photo-ico { font-size: 30rpx; }
+.ms-photo-txt { font-size: 22rpx; color: #666; }
+.ms-note-box  { background: #F7F8FC; border-radius: 15rpx; padding: 15rpx 20rpx; font-size: 21rpx; color: #CCC; }
+
+/* ============================================================
+   STEP 4 — Stats page
+   ============================================================ */
+.ms-stats-sel {
+  display: flex; align-items: center; justify-content: center;
+  padding: 18rpx; background: #fff; border-bottom: 1rpx solid #F0F0F0;
+}
+.ms-stats-hname { font-size: 27rpx; font-weight: 700; color: #333; }
+.ms-stats-arr   { font-size: 22rpx; color: #CCC; margin-left: 8rpx; }
+
+.ms-snums {
+  display: flex; background: #fff;
+  padding: 21rpx 0 18rpx; margin: 14rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-snum-blk { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6rpx; }
+.ms-snum-val { font-size: 48rpx; font-weight: 700; line-height: 1; }
+.ms-snum-lbl { font-size: 20rpx; color: #AAA; }
+.ms-snum-div { width: 1rpx; background: #F0F0F0; }
+
+.ms-bchart {
+  display: flex; align-items: flex-end; gap: 7rpx;
+  background: #fff; border-radius: 20rpx;
+  padding: 17rpx 14rpx 11rpx;
+  margin: 0 14rpx;
+  height: 154rpx; box-sizing: border-box;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-bcol   { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5rpx; height: 100%; justify-content: flex-end; }
+.ms-bbar   { width: 100%; background: #45C5A033; border-radius: 4rpx 4rpx 0 0; min-height: 4rpx; }
+.ms-bbar-on{ background: #45C5A0; }
+.ms-blbl   { font-size: 20rpx; color: #CCC; }
+.ms-blbl-on{ color: #45C5A0; font-weight: 700; }
+
+.ms-cal-hint { font-size: 20rpx; color: #BBBBBB; text-align: center; padding: 11rpx 0 14rpx; }
+
+/* ============================================================
+   STEP 5 — Social page
+   ============================================================ */
+.ms-social-hdr { background: #fff; padding: 21rpx 31rpx; border-bottom: 1rpx solid #F5F5F5; }
+.ms-social-title { font-size: 31rpx; font-weight: 700; color: #333; }
+
+.ms-friend-card {
+  background: #fff; margin: 14rpx 14rpx 0;
+  border-radius: 20rpx; padding: 0 20rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-fr-row  { display: flex; align-items: center; gap: 17rpx; padding: 20rpx 0; }
+.ms-avatar  {
+  width: 59rpx; height: 59rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 25rpx; font-weight: 700; flex-shrink: 0;
+}
+.ms-finfo   { flex: 1; min-width: 0; }
+.ms-fname   { font-size: 25rpx; font-weight: 600; color: #333; }
+.ms-fhabit  { font-size: 20rpx; margin-top: 4rpx; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ms-fbadge  {
+  width: 45rpx; height: 45rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 21rpx; color: #fff; font-weight: 700; flex-shrink: 0;
+}
+.ms-fbadge-none { background: #F0F0F0; color: #CCC; font-size: 18rpx; }
+
+.ms-invite-wrap { padding: 14rpx; }
+.ms-invite {
+  background: #45C5A014; color: #45C5A0;
+  border-radius: 17rpx; padding: 20rpx;
+  font-size: 24rpx; font-weight: 600; text-align: center;
+  border: 1.5rpx dashed #45C5A055;
+}
+
+/* ============================================================
+   STEP 6 — Finish
+   ============================================================ */
+.illus-finish {
+  align-items: center; justify-content: center; gap: 8rpx;
+  margin-top: 150rpx;
+}
+
+.finish-stars { display: flex; gap: 14rpx; margin-bottom: 20rpx; }
+
+.fstar { animation: star-float 2.2s ease-in-out infinite; }
+.fs1 { font-size: 26rpx; animation-delay: 0s; }
+.fs2 { font-size: 22rpx; animation-delay: 0.35s; }
+.fs3 { font-size: 34rpx; animation-delay: 0.18s; }
+.fs4 { font-size: 22rpx; animation-delay: 0.52s; }
+.fs5 { font-size: 26rpx; animation-delay: 0.7s; }
+.fs6 { font-size: 40rpx; animation-delay: 0.25s; }
+.fs7 { font-size: 40rpx; animation-delay: 0.6s; }
+
+@keyframes star-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-14rpx) rotate(14deg); }
+}
+
+.finish-ring {
+  width: 200rpx; height: 200rpx; border-radius: 50%;
+  border: 7rpx solid #45C5A0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #45C5A014, #45C5A006);
+  box-shadow: 0 4rpx 32rpx rgba(69,197,160,0.30);
+  animation: ring-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes ring-pop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.finish-ck { font-size: 100rpx; font-weight: 700; color: #45C5A0; }
+
+.finish-sub { display: flex; gap: 20rpx; margin-top: 25rpx; }
+
+/* ============================================================
+   STEP 4 — Stats redesign (matches actual UI)
+   ============================================================ */
+.ms-htabs {
+  display: flex; gap: 12rpx;
+  padding: 16rpx 17rpx 10rpx;
+  overflow: hidden;
+}
+.ms-htab {
+  flex-shrink: 0; padding: 9rpx 20rpx; border-radius: 30rpx;
+  background: #F5F5F5; font-size: 22rpx; color: #888; font-weight: 500;
+}
+.ms-htab-on { background: #45C5A014; color: #45C5A0; font-weight: 700; }
+
+.ms-stat-row {
+  display: flex; align-items: center;
+  background: #fff;
+  border-radius: 17rpx;
+  margin: 0 17rpx 11rpx;
+  padding: 16rpx 0;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+.ms-stat-cell {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7rpx;
+}
+.ms-stat-divider { width: 1rpx; height: 44rpx; background: rgba(69,197,160,0.55); flex-shrink: 0; }
+.ms-stat-val { font-size: 38rpx; font-weight: 700; line-height: 1; }
+.ms-stat-lbl { font-size: 17rpx; color: #888; }
+
+.ms-badge-sec {
+  display: flex; align-items: center; gap: 14rpx;
+  background: #fff; border-radius: 17rpx;
+  margin: 0 17rpx 11rpx;
+  padding: 15rpx 17rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-badge-ico  { font-size: 32rpx; flex-shrink: 0; }
+.ms-badge-body { flex: 1; }
+.ms-badge-name { font-size: 22rpx; font-weight: 700; color: #333; }
+.ms-badge-sub  { font-size: 17rpx; color: #AAA; margin-top: 3rpx; }
+.ms-badge-count-btn {
+  font-size: 17rpx;
+  color: #45C5A0;
+  font-weight: 600;
+  padding: 6rpx 14rpx;
+  background: rgba(69,197,160,0.10);
+  border-radius: 18rpx;
+  flex-shrink: 0;
+}
+
+.ms-week-hdr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4rpx 17rpx 10rpx;
+}
+.ms-week-title { font-size: 22rpx; font-weight: 700; color: #333; }
+.ms-week-toggle { font-size: 20rpx; color: #AAA; }
+
+/* ============================================================
+   STEP 5 — Friends redesign (matches actual UI)
+   ============================================================ */
+.ms-sec-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16rpx 17rpx 10rpx;
+}
+.ms-sec-title { font-size: 23rpx; font-weight: 700; color: #333; }
+.ms-sec-mgr   { font-size: 21rpx; color: #45C5A0; font-weight: 600; }
+
+.ms-shared-list { padding: 0 17rpx; }
+.ms-shared-item {
+  background: #fff; border-radius: 17rpx;
+  display: flex; align-items: center; gap: 14rpx;
+  padding: 15rpx 17rpx; margin-bottom: 11rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+}
+.ms-sh-icon {
+  width: 50rpx; height: 50rpx; border-radius: 13rpx;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 27rpx; flex-shrink: 0;
+}
+.ms-sh-body  { flex: 1; }
+.ms-sh-name  { font-size: 23rpx; font-weight: 600; color: #333; }
+.ms-sh-sub   { font-size: 19rpx; color: #CCC; margin-top: 4rpx; }
+.ms-sh-edit  { font-size: 21rpx; color: #45C5A0; font-weight: 600; flex-shrink: 0; }
+
+.ms-friend-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14rpx 0 10rpx; gap: 7rpx;
+}
+.ms-fe-icons { font-size: 36rpx; letter-spacing: 6rpx; }
+.ms-fe-title { font-size: 21rpx; color: #888; font-weight: 600; }
+.ms-fe-sub   { font-size: 18rpx; color: #BBB; }
+
+.ms-share-btn {
+  margin: 10rpx 17rpx 14rpx;
+  background: linear-gradient(135deg, #52CDA8, #2EBB92);
+  color: #fff; font-size: 23rpx; font-weight: 700;
+  border-radius: 40rpx; padding: 16rpx 0;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(69,197,160,0.35);
+}
+
+/* ============================================================
+   STEP 4 (NEW) — Quick checkin / multi-checkin / reminder
+   ============================================================ */
+.mock-screen-sm {
+  min-height: 0;
+}
+
+.ms-hi-count {
+  font-size: 22rpx;
+  font-weight: 800;
+  letter-spacing: -1rpx;
+}
+
+.ms-remind-card {
+  display: flex; align-items: center; gap: 14rpx;
+  background: #fff; border-radius: 17rpx;
+  margin: 0 17rpx 11rpx;
+  padding: 14rpx 17rpx;
+  box-shadow: 0 1rpx 6rpx rgba(0,0,0,0.05);
+  border-left: 4rpx solid #45C5A0;
+}
+.ms-remind-ico   { font-size: 30rpx; flex-shrink: 0; }
+.ms-remind-body  { flex: 1; }
+.ms-remind-title { font-size: 22rpx; font-weight: 700; color: #333; }
+.ms-remind-sub   { font-size: 17rpx; color: #AAA; margin-top: 3rpx; }
+.ms-remind-btn {
+  font-size: 20rpx; font-weight: 700; color: #fff;
+  background: #45C5A0; border-radius: 20rpx;
+  padding: 8rpx 18rpx; flex-shrink: 0;
+}
+
+/* ============================================================
+   STEP 7 — 趣味互动 (friend interaction)
+   ============================================================ */
+.ms-fi-hdr {
+  display: flex; flex-direction: column; align-items: center;
+  background: linear-gradient(150deg, #3AC99E, #22B085);
+  padding: 16rpx 20rpx 14rpx;
+  gap: 6rpx;
+}
+.ms-fi-av {
+  width: 56rpx; height: 56rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22rpx; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.22);
+  margin-bottom: 2rpx;
+}
+.ms-fi-name { font-size: 22rpx; font-weight: 700; color: #fff; }
+.ms-fi-prog { font-size: 17rpx; color: rgba(255,255,255,0.78); }
+
+.ms-fi-habit {
+  display: flex; align-items: center; gap: 12rpx;
+  padding: 12rpx 17rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  background: #fff;
+}
+.ms-fi-streak {
+  font-size: 19rpx; font-weight: 700;
+  padding: 5rpx 12rpx; border-radius: 20rpx;
+  flex-shrink: 0;
+}
+.ms-fi-bell { font-size: 22rpx; flex-shrink: 0; margin-left: 4rpx; }
+
+.ms-fi-actions {
+  display: flex; justify-content: center; gap: 40rpx;
+  padding: 14rpx 0 10rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+.ms-fi-like-btn, .ms-fi-cmt-btn {
+  font-size: 20rpx; color: #AAA; font-weight: 600;
+  display: flex; align-items: center; gap: 6rpx;
+}
+.ms-fi-liked { color: #FF6B6B; }
+
+.ms-fi-conv {
+  background: #F7FAF8;
+  padding: 14rpx 14rpx 14rpx;
+  margin-top: 2rpx;
+  display: flex; flex-direction: column; gap: 12rpx;
+}
+.ms-fi-convrow {
+  display: flex; align-items: flex-end; gap: 8rpx;
+}
+.ms-fi-convrow-mine { flex-direction: row-reverse; }
+.ms-fi-conv-av {
+  width: 42rpx; height: 42rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18rpx; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.ms-fi-bubble {
+  max-width: 62%; padding: 12rpx 18rpx;
+  border-radius: 18rpx; font-size: 24rpx; line-height: 1.45;
+}
+.ms-fi-bubble-theirs {
+  background: #fff; color: #333;
+  border-bottom-left-radius: 5rpx;
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.06);
+}
+.ms-fi-bubble-mine {
+  background: #45C5A0; color: #fff;
+  border-bottom-right-radius: 5rpx;
+}

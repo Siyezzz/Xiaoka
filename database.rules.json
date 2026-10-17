@@ -1,0 +1,10 @@
+{
+  "habits": {
+    "read": "doc._openid == auth.openid",
+    "write": "doc._openid == auth.openid"
+  },
+  "checkins": {
+    "read": "doc._openid == auth.openid",
+    "write": "doc._openid == auth.openid"
+  }
+}

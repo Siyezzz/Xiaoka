@@ -1,0 +1,544 @@
+<view class="page">
+  <!-- 顶部绿条 -->
+  <view class="page-header">
+    <view style="height: {{statusBarHeight}}px"></view>
+    <view class="header-title-row">
+      <view class="header-title">好友</view>
+    </view>
+    <view class="header-sub">{{friends.length}} 位好友</view>
+    <view class="chat-bubble {{item.side}}">
+  <view class="chat-bubble-wrap">
+    <view class="chat-bubble-bg">
+      <view class="chat-quote" wx:if="{{item.quote}}">
+        {{item.quote}}
+      </view>
+      <view class="chat-content">{{item.content}}</view>
+    </view>
+  </view>
+</view>
+  </view>
+
+  <!-- 我的名片（始终可见） -->
+  <view class="my-card">
+    <view class="my-card-row">
+      <view class="my-avatar-wrap" bindtap="onEditProfile" hover-class="press-sm" hover-stay-time="80">
+        <image wx:if="{{myProfile.avatarUrl}}" class="my-avatar-img" src="{{myProfile.avatarUrl}}" mode="aspectFill"/>
+        <view wx:else class="my-avatar-initials">{{myProfile.displayName ? myProfile.displayName[0] : '?'}}</view>
+      </view>
+      <view class="my-card-info" bindtap="onEditProfile">
+        <view class="my-name">{{myProfile.displayName || '点击设置昵称'}}</view>
+        <view class="my-note-display" wx:if="{{myNote}}">{{myNote}}</view>
+        <view class="my-edit-hint" wx:else>点击编辑资料</view>
+      </view>
+    </view>
+    <view class="invite-btn" bindtap="onShowShareCode" hover-class="press" hover-stay-time="80">分享给好友</view>
+  </view>
+
+  <!-- 我分享的习惯 -->
+  <view class="section-header">
+    <view class="section-title">我分享的习惯 ({{sharedCount}})</view>
+    <view class="section-right-row">
+      <view class="badge-row" bindtap="onToggleBadgeShare" hover-class="press-sm" hover-stay-time="80">
+        <text class="badge-row-label">🏆 勋章展示</text>
+        <view class="mini-switch {{showBadge ? 'mini-switch-on' : ''}}">
+          <view class="mini-switch-thumb"></view>
+        </view>
+      </view>
+      <view class="add-btn" bindtap="onShowShareModal" hover-class="press-sm" hover-stay-time="80">管理</view>
+    </view>
+  </view>
+
+  <view class="shared-habit-list" wx:if="{{sharedHabits.length > 0}}">
+    <view class="shared-habit-card" wx:for="{{sharedHabits}}" wx:key="_id" hover-class="press" hover-stay-time="120">
+      <view class="shared-habit-left">
+        <view class="shared-habit-icon-bg" style="background: {{item.color}}22">
+          <text class="shared-habit-icon-text">{{item.icon}}</text>
+        </view>
+        <view class="shared-habit-meta">
+          <view class="shared-habit-name">{{item.name}}</view>
+          <view class="shared-with-row">
+            <view
+              wx:for="{{item.sharedWith}}"
+              wx:for-item="fr"
+              wx:for-index="fi"
+              wx:key="fi"
+              class="mini-avatar"
+              style="background: {{fr.color}}; {{fi > 0 ? 'margin-left: -12rpx;' : ''}}"
+            >
+              <image wx:if="{{fr.avatarUrl}}" class="mini-avatar-img" src="{{fr.avatarUrl}}" mode="aspectFill"/>
+              <text wx:else class="mini-avatar-text">{{fr.initial}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="shared-edit-btn" bindtap="onShowFriendEdit" data-id="{{item._id}}" hover-class="press-sm" hover-stay-time="80">编辑</view>
+    </view>
+  </view>
+
+  <view class="shared-empty" wx:else>
+    <text class="shared-empty-text">好友目前看不到你的打卡，点「管理」开启分享</text>
+  </view>
+
+  <!-- 好友区 -->
+  <view class="section-header" style="padding-top: 28rpx">
+    <view class="section-title">打卡好伙伴 ({{friends.length}})</view>
+    <view
+      class="add-btn {{friendManageMode ? 'manage-active-btn' : ''}}"
+      bindtap="onToggleManage"
+      hover-class="press-sm"
+      hover-stay-time="80"
+    >{{friendManageMode ? '完成' : '管理'}}</view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="loading-tip">加载中...</view>
+  </block>
+
+  <block wx:elif="{{friends.length === 0}}">
+    <view class="empty-state">
+      <view class="empty-forest">🌏</view>
+      <view class="empty-text">这里还很安静</view>
+      <view class="empty-sub">邀请好友加入，一起培养良好习惯</view>
+      <view class="btn-invite" bindtap="onShowShareCode" hover-class="press" hover-stay-time="80">分享给好友</view>
+    </view>
+  </block>
+
+  <view class="friend-grid" wx:else>
+    <view class="friend-grid-item"
+      wx:for="{{friends}}"
+      wx:key="openid"
+      bindtap="onViewFriend"
+      data-openid="{{item.openid}}"
+      data-name="{{item.displayName}}"
+      data-avatarurl="{{item.avatarUrl}}"
+      data-color="{{item.color}}"
+      hover-class="press-sm"
+      hover-stay-time="80"
+    >
+      <view class="friend-av-wrap">
+        <view class="friend-av-circle" style="background: {{item.color}}">
+          <image wx:if="{{item.avatarUrl}}" class="friend-av-img" src="{{item.avatarUrl}}" mode="aspectFill"/>
+          <text wx:else class="friend-av-initial">{{item.initial}}</text>
+        </view>
+        <view
+          wx:if="{{friendManageMode}}"
+          class="friend-del-badge"
+          catchtap="onDeleteFriend"
+          data-openid="{{item.openid}}"
+          data-name="{{item.displayName}}"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >✕</view>
+      </view>
+
+      <!-- 好友名称 -->
+      <view class="friend-grid-name">{{item.displayName}}</view>
+
+      <!-- 勋章（在上） -->
+      <view class="friend-badge-chip" wx:if="{{item.badge}}">
+        <text class="friend-badge-icon">{{item.badge.icon}}</text>
+        <text class="friend-badge-label">{{item.badge.label}}</text>
+      </view>
+
+      <!-- 习惯小点（在下，不重叠） -->
+      <view class="friend-habit-dots" wx:if="{{item.habitDots && item.habitDots.length > 0}}">
+        <view
+          class="f-habit-dot"
+          wx:for="{{item.habitDots}}"
+          wx:for-item="dot"
+          wx:key="index"
+          style="background: {{dot.color || item.color || '#45C5A0'}}"
+        ></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 好友点赞/评论区（按发送者分组） -->
+  <view class="recv-section" wx:if="{{notifGroups.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">好友互动 ({{receivedNotifications.length}})</view>
+    </view>
+    <view class="recv-list">
+      <view class="recv-group-card" wx:for="{{notifGroups}}" wx:key="fromOpenid">
+        <!-- 头像 + 名字只出现一次 -->
+        <view class="recv-group-header">
+          <view
+            class="recv-av"
+            style="background: {{item.fromColor}}"
+            bindtap="onViewFriendFromNotif"
+            data-openid="{{item.fromOpenid}}"
+            data-name="{{item.fromName}}"
+            data-avatar="{{item.fromAvatar}}"
+            data-color="{{item.fromColor}}"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >
+            <image wx:if="{{item.fromAvatar}}" class="recv-av-img" src="{{item.fromAvatar}}" mode="aspectFill"/>
+            <text wx:else class="recv-av-txt">{{item.fromInitial}}</text>
+          </view>
+          <text class="recv-name">{{item.fromName}}</text>
+        </view>
+        <!-- 该人所有互动，每条独立行 -->
+        <view class="recv-items-list">
+          <view 
+            class="recv-msg-row" 
+            wx:for="{{item.items}}" 
+            wx:key="_id" 
+            wx:for-item="msg" 
+            wx:for-index="mi"
+            bindtap="onTapRecvMsg"
+            data-id="{{msg._id}}"
+            data-text="{{msg.text || msg.tipText || msg.habitName || '消息'}}"
+            data-name="{{item.fromName}}"
+            data-openid="{{item.fromOpenid}}"
+          >
+            <view class="recv-msg-body">
+              <block wx:if="{{msg.type === 'like'}}">
+                <text class="recv-action">给你点赞了 ❤️</text>
+              </block>
+              <block wx:elif="{{msg.type === 'reminder'}}">
+                <text class="recv-action">🔔 提醒打卡「{{msg.habitName}}」</text>
+                <text wx:if="{{msg.tipText}}" class="recv-comment-txt">：{{msg.tipText}}</text>
+              </block>
+              <block wx:elif="{{msg.type === 'reminder_sent'}}">
+                <text class="recv-action">🔔 你提醒对方打卡「{{msg.habitName}}」</text>
+                <text wx:if="{{msg.tipText}}" class="recv-comment-txt">：{{msg.tipText}}</text>
+                <text wx:else class="recv-comment-txt recv-comment-dim">备注：无</text>
+              </block>
+              <block wx:else>
+                <text class="recv-action">留言：</text>
+                <text wx:if="{{msg.text}}" class="recv-comment-txt">{{msg.text}}</text>
+                <image wx:if="{{msg.imageUrl}}" class="recv-notif-img" src="{{msg.imageUrl}}" mode="aspectFill" catchtap="onPreviewNotifImg" data-url="{{msg.imageUrl}}"/>
+              </block>
+            </view>
+            <view class="recv-msg-time">{{msg.timeStr}}</view>
+            <view class="recv-del-btn" catchtap="onDeleteHomeNotif" data-id="{{msg._id}}" hover-class="press-sm" hover-stay-time="80">✕</view>
+          </view>
+        </view>
+        <!-- 回复按钮（整组共用） -->
+        <view class="recv-group-footer">
+          <view
+            class="recv-reply-btn"
+            bindtap="onToggleReply"
+            data-openid="{{item.fromOpenid}}"
+            data-name="{{item.fromName}}"
+            data-lastcomment="{{item.lastComment}}"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >{{activeReplyId === item.fromOpenid ? '收起' : '回复'}}</view>
+        </view>
+        <!-- 内联回复输入框 -->
+        <view class="recv-reply-row" wx:if="{{activeReplyId === item.fromOpenid}}">
+          <view wx:if="{{curQuote && curQuote.openid === item.fromOpenid}}" class="quote-preview">
+            <text class="quote-text">回复 {{curQuote.name}}：{{curQuote.text}}</text>
+            <text class="quote-close" bindtap="cancelQuote">×</text>
+          </view>
+          <input
+            class="recv-reply-input"
+            value="{{replyInputText}}"
+            placeholder="回复..."
+            bindinput="onInlineReplyInput"
+            focus="{{true}}"
+            confirm-type="send"
+            bindconfirm="onSendInlineReply"
+            data-openid="{{item.fromOpenid}}"
+            adjust-position
+            cursor-spacing="12"
+          />
+          <view
+            class="recv-reply-send {{sendingInlineReply ? 'recv-reply-send-dis' : ''}}"
+            catchtap="onSendInlineReply"
+            data-openid="{{item.fromOpenid}}"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >{{sendingInlineReply ? '…' : '发'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑好友弹窗 -->
+  <view class="modal-mask" wx:if="{{showFriendModal}}" catchtap="" style="padding-bottom: {{safeBottom}}px">
+    <view class="modal-box modal-share" catchtap="">
+      <view class="modal-forest">👥</view>
+      <view class="modal-title">选择可见好友</view>
+      <view class="modal-sub" wx:if="{{friendModalHabit}}">{{friendModalHabit.name}} 分享给谁看</view>
+
+      <view class="share-empty" wx:if="{{friends.length === 0}}">
+        <text class="share-empty-text">还没有好友，去添加吧</text>
+      </view>
+      <view class="share-habit-list" wx:else>
+        <view
+          class="share-habit-row"
+          wx:for="{{friends}}"
+          wx:key="openid"
+          bindtap="onToggleFriendForHabit"
+          data-openid="{{item.openid}}"
+          hover-class="press"
+          hover-stay-time="80"
+        >
+          <view class="friend-modal-avatar" style="background: {{item.color}}">
+            <image wx:if="{{item.avatarUrl}}" class="friend-modal-avatar-img" src="{{item.avatarUrl}}" mode="aspectFill"/>
+            <text wx:else class="friend-modal-avatar-text">{{item.initial}}</text>
+          </view>
+          <view class="share-habit-name">{{item.displayName}}</view>
+          <view
+            class="share-toggle {{friendModalSel[item.openid] ? 'toggle-on' : ''}}"
+            style="{{friendModalSel[item.openid] ? 'background:' + (friendModalHabit.color || '#45C5A0') : ''}}"
+          >
+            <text class="toggle-check" wx:if="{{friendModalSel[item.openid]}}">✓</text>
+          </view>
+        </view>
+      </view>
+
+      <button
+        class="modal-confirm"
+        bindtap="onSaveFriendForHabit"
+        loading="{{savingFriendModal}}"
+        disabled="{{savingFriendModal}}"
+        hover-class="press"
+        hover-stay-time="100"
+      >保存</button>
+      <view class="modal-cancel" bindtap="onHideFriendModal" hover-class="press-text" hover-stay-time="80">取消</view>
+    </view>
+  </view>
+
+  <!-- 分享习惯弹窗 -->
+  <view class="modal-mask" wx:if="{{showShareModal}}" catchtap="" style="padding-bottom: {{safeBottom}}px">
+    <view class="modal-box modal-share" catchtap="">
+      <view class="modal-forest">🌿</view>
+      <view class="modal-title">分享给好友</view>
+      <view class="modal-sub">选择哪些习惯对好友可见</view>
+
+      <view class="share-habit-list" wx:if="{{myHabits.length > 0}}">
+        <view
+          class="share-habit-row"
+          wx:for="{{myHabits}}"
+          wx:key="_id"
+          bindtap="onToggleHabitShare"
+          data-id="{{item._id}}"
+          hover-class="press"
+          hover-stay-time="80"
+        >
+          <view class="share-habit-icon-bg" style="background: {{item.color}}22">
+            <text class="share-habit-icon">{{item.icon}}</text>
+          </view>
+          <view class="share-habit-name">{{item.name}}</view>
+          <view
+            class="share-toggle {{sharingMap[item._id] ? 'toggle-on' : ''}}"
+            style="{{sharingMap[item._id] ? 'background:' + item.color : ''}}"
+          >
+            <text class="toggle-check" wx:if="{{sharingMap[item._id]}}">✓</text>
+          </view>
+        </view>
+      </view>
+      <view class="share-empty" wx:else>
+        <text class="share-empty-text">还没有习惯，先去添加吧</text>
+      </view>
+
+      <button
+        class="modal-confirm"
+        bindtap="onSaveSharing"
+        loading="{{savingSharing}}"
+        disabled="{{savingSharing}}"
+        hover-class="press"
+        hover-stay-time="100"
+      >保存</button>
+      <view class="modal-cancel" bindtap="onHideShareModal" hover-class="press-text" hover-stay-time="80">取消</view>
+    </view>
+  </view>
+
+  <!-- 邀请好友弹窗（小程序码） -->
+  <view class="modal-mask" wx:if="{{showShareCodeModal}}" catchtap="" style="padding-bottom: {{safeBottom}}px">
+    <view class="modal-box" catchtap="">
+      <view class="modal-title">邀请好友</view>
+      <view class="modal-sub">让好友扫描小程序码，直接加你为好友</view>
+      <view class="qr-wrap" bindlongpress="onSaveQRCode">
+        <view wx:if="{{loadingQR}}" class="qr-loading">生成中...</view>
+        <image wx:elif="{{qrCodePath}}" class="qr-img" src="{{qrCodePath}}" mode="aspectFit"/>
+        <view wx:else class="qr-loading">生成失败，请重试</view>
+      </view>
+      <view class="qr-hint" wx:if="{{qrCodePath}}">长按图片可保存</view>
+      <view class="qr-btn-row">
+        <view
+          class="qr-btn qr-btn-save {{!qrCodePath ? 'qr-btn-disabled' : ''}}"
+          bindtap="onSaveQRCode"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >保存图片</view>
+        <view
+          class="qr-btn qr-btn-share {{!qrCodePath ? 'qr-btn-disabled' : ''}}"
+          bindtap="onShareQRImage"
+          hover-class="press-sm"
+          hover-stay-time="80"
+        >发给好友</view>
+      </view>
+      <view class="modal-cancel" bindtap="onHideShareCode" hover-class="press-text" hover-stay-time="80">关闭</view>
+    </view>
+  </view>
+
+  <!-- 好友确认弹窗 -->
+  <view class="modal-mask" wx:if="{{showPendingModal}}" catchtap="" style="padding-bottom: {{safeBottom}}px">
+    <view class="modal-box" catchtap="">
+      <view class="modal-title">添加好友</view>
+      <view class="modal-sub">确认添加为好友？</view>
+      <view class="pend-friend-row" wx:if="{{pendingFriend}}">
+        <view class="pend-avatar" style="background: {{pendingFriend.color}}; overflow: hidden;">
+          <image wx:if="{{pendingFriend.avatarUrl}}" class="pend-avatar-img" src="{{pendingFriend.avatarUrl}}" mode="aspectFill"/>
+          <text wx:else class="pend-avatar-text">{{pendingFriend.initial}}</text>
+        </view>
+        <view class="pend-name">{{pendingFriend.displayName}}</view>
+      </view>
+      <button
+        class="modal-confirm"
+        bindtap="onAcceptPending"
+        loading="{{acceptingFriend}}"
+        disabled="{{acceptingFriend}}"
+        hover-class="press"
+        hover-stay-time="100"
+      >接受</button>
+      <view class="modal-cancel" bindtap="onDeclinePending" hover-class="press-text" hover-stay-time="80">取消</view>
+    </view>
+  </view>
+
+  <!-- 消息弹窗 -->
+  <view class="modal-mask" wx:if="{{showMessages}}" catchtap="onHideMessages" style="padding-bottom: {{safeBottom}}px">
+    <view class="modal-box modal-messages" catchtap="noop">
+      <view class="modal-title">消息</view>
+      <!-- 收到 / 发出 tab -->
+      <view class="msg-tab-row">
+        <view class="msg-tab {{messagesTab === 'received' ? 'msg-tab-active' : ''}}" catchtap="onSwitchMessagesTab" data-tab="received">收到</view>
+        <view class="msg-tab {{messagesTab === 'sent' ? 'msg-tab-active' : ''}}" catchtap="onSwitchMessagesTab" data-tab="sent">发出</view>
+      </view>
+
+      <!-- 收到的 -->
+      <block wx:if="{{messagesTab === 'received'}}">
+        <view class="notif-stats" wx:if="{{notifications.length > 0}}">
+          <view class="notif-stat-item">
+            <text class="notif-stat-num">{{totalReceivedLikes}}</text>
+            <text class="notif-stat-label">个赞</text>
+          </view>
+          <view class="notif-stat-divider"></view>
+          <view class="notif-stat-item">
+            <text class="notif-stat-num">{{totalReceivedComments}}</text>
+            <text class="notif-stat-label">条评论</text>
+          </view>
+          <view class="notif-stat-hint">点击消息 → 进入对方页面回复</view>
+        </view>
+        <view class="notif-list" wx:if="{{notifications.length > 0}}">
+          <view
+            class="notif-item"
+            wx:for="{{notifications}}"
+            wx:key="_id"
+            bindtap="onTapNotification"
+            data-openid="{{item.fromOpenid}}"
+            data-name="{{item.fromName}}"
+            data-avatar="{{item.fromAvatar}}"
+            data-color="{{item.fromColor}}"
+            data-type="{{item.type}}"
+            data-text="{{item.text}}"
+            hover-class="press-sm"
+            hover-stay-time="80"
+          >
+            <view class="notif-avatar" style="background: {{item.fromColor}}">
+              <image wx:if="{{item.fromAvatar}}" class="notif-avatar-img" src="{{item.fromAvatar}}" mode="aspectFill"/>
+              <text wx:else class="notif-avatar-text">{{item.fromInitial}}</text>
+            </view>
+            <view class="notif-body">
+              <view class="notif-text">
+                <text class="notif-name">{{item.fromName}}</text>
+                <text>{{item.type === 'like' ? ' 给你点赞了 ❤️' : ' 留言：'}}</text>
+                <text wx:if="{{item.type === 'comment'}}" class="notif-comment-txt">{{item.text}}</text>
+              </view>
+              <view class="notif-time">{{item.timeStr}}</view>
+            </view>
+            <view class="notif-unread-dot" wx:if="{{!item.read}}"></view>
+            <text class="notif-go">›</text>
+            <view class="notif-del-btn" catchtap="onDeleteNotification" data-id="{{item._id}}" data-tab="received" hover-class="press-sm" hover-stay-time="80">✕</view>
+          </view>
+        </view>
+        <view class="notif-empty" wx:else>
+          <text class="notif-empty-text">暂无收到的消息</text>
+        </view>
+      </block>
+
+      <!-- 发出的 -->
+      <block wx:elif="{{messagesTab === 'sent'}}">
+        <view class="notif-list" wx:if="{{sentNotifications.length > 0}}">
+          <view class="notif-item" wx:for="{{sentNotifications}}" wx:key="_id">
+            <view class="notif-avatar" style="background: {{item.toColor}}">
+              <text class="notif-avatar-text">{{item.toInitial}}</text>
+            </view>
+            <view class="notif-body">
+              <view class="notif-text">
+                <text>{{item.type === 'like' ? '给 ' : '给 '}}</text>
+                <text class="notif-name">{{item.toName}}</text>
+                <text>{{item.type === 'like' ? ' 点赞了 ❤️' : ' 留言：'}}</text>
+                <text wx:if="{{item.type === 'comment'}}" class="notif-comment-txt">{{item.text}}</text>
+              </view>
+              <view class="notif-time">{{item.timeStr}}</view>
+            </view>
+            <view class="notif-del-btn" catchtap="onDeleteNotification" data-id="{{item._id}}" data-tab="sent" hover-class="press-sm" hover-stay-time="80">✕</view>
+          </view>
+        </view>
+        <view class="notif-empty" wx:else>
+          <text class="notif-empty-text">暂无发出的消息</text>
+        </view>
+      </block>
+
+      <view class="modal-cancel" bindtap="onHideMessages" hover-class="press-text" hover-stay-time="80">关闭</view>
+    </view>
+  </view>
+
+  <!-- 个人资料设置弹窗 -->
+  <view class="profile-mask" wx:if="{{showProfileSetup}}" catchtouchmove="noop" catchtap="noop" style="padding-bottom: {{safeBottom}}px">
+    <view class="profile-sheet" catchtap="noop">
+      <view class="profile-sheet-title">编辑资料</view>
+      <view class="profile-sheet-sub">好友会看到你的以下信息~</view>
+
+      <!-- 头像：wrapper 裁圆 + 透明按钮叠在图片上，与注册页一致 -->
+      <view class="profile-avatar-wrap">
+        <image wx:if="{{tempAvatarUrl}}" class="profile-avatar-img" src="{{tempAvatarUrl}}" mode="aspectFill"/>
+        <view wx:else class="profile-avatar-placeholder">
+          <text class="profile-avatar-icon">📷</text>
+        </view>
+        <button class="profile-avatar-btn-overlay" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+      </view>
+
+      <view class="profile-nickname-wrap">
+        <input
+          class="profile-nickname-input"
+          type="nickname"
+          placeholder="输入昵称"
+          placeholder-class="profile-nick-ph"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          maxlength="20"
+          adjust-position
+        />
+      </view>
+
+      <view class="profile-note-wrap">
+        <input
+          class="profile-note-input"
+          placeholder="自律宣言"
+          placeholder-class="profile-nick-ph"
+          value="{{tempNote}}"
+          bindinput="onTempNoteInput"
+          maxlength="30"
+          adjust-position
+        />
+      </view>
+
+      <button
+        class="profile-save-btn"
+        bindtap="onSaveProfile"
+        loading="{{savingProfile}}"
+        disabled="{{savingProfile}}"
+        hover-class="press"
+        hover-stay-time="100"
+      >保存</button>
+      <view class="profile-cancel" bindtap="onSkipProfile" hover-class="press-text" hover-stay-time="80">取消</view>
+    </view>
+  </view>
+</view>
